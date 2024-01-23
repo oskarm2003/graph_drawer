@@ -50,7 +50,7 @@ document.onkeydown = (e) => {
         case 'KeyS':
             document.querySelector('#keep_selected').click()
             break
-        case 'KeyA':
+        case 'KeyN':
             document.querySelector('#show_alias').click()
             break
         case 'KeyB':

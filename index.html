@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script/graph_data.js"></script>
+    <script src="script/graph_display.js"></script>
+    <script src="script/interaction_controller.js"></script>
+    <script src="script/main.js" defer></script>
+    <link rel="stylesheet" href="main.css">
+    <title>Graph Maker</title>
+</head>
+
+<body>
+
+    <div class="menu-wrapper">
+        <h1>Graph Maker</h1>
+        <div class="buttons">
+            <button id="add_vertex">add vertex</button>
+            <button id="delete_vertex">delete selected</button>
+            <button id="change_alias">change alias</button>
+            <div id="alias_input">
+                <p>new alias</p>
+                <input type="text">
+                <button>done</button>
+            </div>
+            <div class="checkbox-wrapper">
+                <p>create on click</p>
+                <div id="click_create" class="checkbox" checked="false">
+                    <canvas id="checkbox_canvas"></canvas>
+                </div>
+            </div>
+            <div class="checkbox-wrapper">
+                <p>select last connected</p>
+                <div id="keep_selected" class="checkbox" checked="false">
+                    <canvas id="checkbox_canvas"></canvas>
+                </div>
+            </div>
+            <div class="checkbox-wrapper">
+                <p>blank background</p>
+                <div id="blank_background" class="checkbox" checked="false">
+                    <canvas id="checkbox_canvas"></canvas>
+                </div>
+            </div>
+            <div class="checkbox-wrapper">
+                <p>show name</p>
+                <div id="show_alias" class="checkbox" checked="false">
+                    <canvas id="checkbox_canvas"></canvas>
+                </div>
+            </div>
+            <div class="checkbox-wrapper">
+                <p>highlight mode</p>
+                <div id="highlight" class="checkbox" checked="false">
+                    <canvas id="checkbox_canvas"></canvas>
+                </div>
+            </div>
+            <div class="checkbox-wrapper" id="size">
+                <p>vertex size</p>
+                <div class="range">
+                    <div></div>
+                </div>
+                <p>10</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="selection"></div>
+    <canvas id="board"></canvas>
+
+</body>
+
+</html>

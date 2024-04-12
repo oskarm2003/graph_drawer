@@ -9,22 +9,21 @@
     <script src="script/interaction_controller.js"></script>
     <script src="script/main.js" defer></script>
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="popups.css">
     <title>Graph Maker</title>
 </head>
 
 <body>
 
+    <!-- user menu -->
     <div class="menu-wrapper">
         <h1>Graph Maker</h1>
         <div class="buttons">
             <button id="add_vertex">add vertex</button>
             <button id="delete_vertex">delete selected</button>
-            <button id="change_alias">change name</button>
-            <div id="alias_input">
-                <p>new name</p>
-                <input type="text">
-                <button>done</button>
-            </div>
+            <button id="change_alias">rename selected</button>
+            <button id="save_graph">save graph</button>
+
             <div class="checkbox-wrapper">
                 <p>create on click</p>
                 <div id="click_create" class="checkbox" checked="false">
@@ -64,6 +63,31 @@
             </div>
         </div>
     </div>
+
+    <!-- pop ups -->
+    <div id="saver" class="popup">
+        <p>save graph as...</p>
+        <select name="choose_ds" id="choose_ds">
+            <option value="-">-</option>
+            <option value="matrix">matrix</option>
+            <option value="adjacency">adjacency list</option>
+            <option value="math_object">vertezies and edges</option>
+        </select>
+        <!-- <button id="generate_graph">generate data</button> -->
+        <pre><code id="code_saver">code will appear here...</code></pre>
+        <div>
+            <button id="copy_saver">copy</button>
+            <button id="exit_saver">exit</button>
+        </div>
+    </div>
+
+    <div id="alias_input" class="popup">
+        <p>new name</p>
+        <input type="text">
+        <button>done</button>
+    </div>
+
+    <div id="notification" class="popup">copied to clipboard</div>
 
     <div id="selection"></div>
     <canvas id="board"></canvas>

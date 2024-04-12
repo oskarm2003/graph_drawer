@@ -62,3 +62,42 @@ function highlight_edge(v1, v2) {
     EDGE_MATRIX[v2][v1] += value
 
 }
+
+function generate_data(type) {
+
+
+    if (type == 'matrix') {
+        tmp = "[\n"
+        for (let row of EDGE_MATRIX) {
+            tmp += '  ' + JSON.stringify(row).replaceAll('2', '1') + ',\n'
+        }
+        return tmp + ']'
+    }
+    if (type == 'adjacency') {
+        tmp = "[\n"
+        for (let row of EDGE_MATRIX) {
+            list = []
+            for (let i = 0; i < row.length; i++) {
+                if (row[i] != 0) { list.push(i) }
+            }
+            tmp += '  ' + JSON.stringify(list) + ',\n'
+        }
+        return tmp + "]"
+    }
+    if (type == 'math_object') {
+        tmp = "[\n  " +
+            JSON.stringify(Array.from({ length: EDGE_MATRIX.length }, (_, index) => index))
+        edges = []
+        for (let i = 0; i < EDGE_MATRIX.length; i++) {
+            for (let j = 0; j < EDGE_MATRIX.length; j++) {
+                if (EDGE_MATRIX[i][j] != 0) {
+                    edges.push([i, j])
+                }
+            }
+        }
+        return tmp + ",\n  " + JSON.stringify(edges) + "\n]"
+    }
+
+    return "code will appear here..."
+
+}

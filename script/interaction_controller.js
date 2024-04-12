@@ -256,3 +256,42 @@ function change_alias() {
     button.onclick = submit
 
 }
+
+function open_saver() {
+    SAVER = document.querySelector("#saver")
+    CODE = document.querySelector("#code_saver")
+    SAVER.style.display = 'flex'
+
+    //on option select
+    MENU = document.querySelector("#choose_ds")
+    CODE.innerText = generate_data(MENU.value)
+    MENU.onclick = () => {
+        CODE.innerText = generate_data(MENU.value)
+    }
+
+    //copy generated code to clipboard
+    document.querySelector("#copy_saver").onclick = () => {
+        navigator.clipboard.writeText(CODE.innerText)
+        notify("copied to clipboard")
+    }
+
+    //close saver menu
+    document.querySelector("#exit_saver").onclick = () => {
+        SAVER.style.display = 'none'
+    }
+}
+
+function notify(message) {
+    notification = document.querySelector("#notification")
+    notification.innerText = message
+    notification.style.display = 'block'
+    setTimeout(() => {
+        notification.style.top = '92%'
+    }, 1)
+    setTimeout(() => {
+        notification.style.top = '120%'
+        setTimeout(() => {
+            notification.style.display = 'none'
+        }, 500)
+    }, 3000)
+}

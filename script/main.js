@@ -3,6 +3,7 @@ render()
 document.querySelector('#add_vertex').onclick = add_vertex
 document.querySelector('#delete_vertex').onclick = delete_selected
 document.querySelector('#change_alias').onclick = change_alias
+document.querySelector('#save_graph').onclick = open_saver
 document.querySelector('#click_create').onclick = check
 document.querySelector('#keep_selected').onclick = check
 document.querySelector('#blank_background').onclick = check

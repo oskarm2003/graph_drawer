@@ -1,0 +1,45 @@
+#projects {
+    width: fit-content;
+    display: flex;
+    z-index: 0;
+    position: absolute;
+}
+
+#projects>div {
+    font-size: 2rem;
+    padding: 0.5rem 2rem 0.5rem 2rem;
+    border: 1px solid #707070;
+    border-top: 0;
+    width: fit-content;
+    background-color: #efefef;
+    border-radius: 0 0 10px 10px;
+    cursor: pointer;
+    transform: translateY(-15%);
+    z-index: 0;
+    user-select: none;
+}
+
+#projects>div:hover {
+    background-color: #dfdfdf;
+}
+
+#projects>div[selected="1"] {
+    transform: translateY(0);
+    background-color: #ffcfcf;
+}
+
+#projects>#add_new {
+    color: white;
+    background-color: #0f0f0fdf;
+}
+
+#projects>div>input {
+    font-family: serif;
+    text-align: center;
+    padding: 0;
+    border: none;
+    background-color: #ffffff5f;
+    font-size: 2rem;
+    outline: none;
+    width: 10rem;
+}

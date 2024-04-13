@@ -1,3 +1,13 @@
+GRAPHS = [
+    {
+        VERTICES_POS: VERTICES_POS,
+        aliases: ALIASES,
+        edge_highlight: EDGE_HIGHLIGHT,
+        edge_matrix: EDGE_MATRIX,
+        graph_type: GRAPH_TYPE,
+    }
+]
+
 init_canvas()
 render()
 document.querySelector('#add_vertex').onclick = add_vertex
@@ -9,6 +19,8 @@ document.querySelector('#keep_selected').onclick = check
 document.querySelector('#blank_background').onclick = check
 document.querySelector('#show_alias').onclick = check
 document.querySelector('#highlight').onclick = check
+document.querySelector('#projects').onclick = manage_projects
+document.querySelector('#convert_type').onclick = convert_graph_type
 
 //custom range
 const range_handler = () => {
@@ -43,7 +55,10 @@ CANVAS.onmousemove = on_move
 CANVAS.onmouseup = on_up
 CANVAS.onmouseout = mouse_out
 
+ACCEPT_HOTKEYS = true
+
 document.onkeydown = (e) => {
+    if (!ACCEPT_HOTKEYS) return
     switch (e.code) {
         case 'KeyC':
             document.querySelector('#click_create').click()

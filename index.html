@@ -8,8 +8,9 @@
     <script src="script/graph_display.js"></script>
     <script src="script/interaction_controller.js"></script>
     <script src="script/main.js" defer></script>
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="popups.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/popups.css">
+    <link rel="stylesheet" href="styles/projects_select.css">
     <title>Graph Maker</title>
 </head>
 
@@ -22,6 +23,7 @@
             <button id="add_vertex">add vertex</button>
             <button id="delete_vertex">delete selected</button>
             <button id="change_alias">rename selected</button>
+            <button id="convert_type">convert to directed</button>
             <button id="save_graph">save graph</button>
 
             <div class="checkbox-wrapper">
@@ -64,6 +66,12 @@
         </div>
     </div>
 
+    <!-- created projects -->
+    <div id="projects">
+        <div selected="1">undirected graph 1</div>
+        <div id="add_new"><b>+</b></div>
+    </div>
+
     <!-- pop ups -->
     <div id="saver" class="popup">
         <p>save graph as...</p>
@@ -71,7 +79,7 @@
             <option value="-">-</option>
             <option value="matrix">matrix</option>
             <option value="adjacency">adjacency list</option>
-            <option value="math_object">vertezies and edges</option>
+            <option value="math_object">vertices and edges</option>
         </select>
         <!-- <button id="generate_graph">generate data</button> -->
         <pre><code id="code_saver">code will appear here...</code></pre>

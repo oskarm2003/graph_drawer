@@ -1,6 +1,24 @@
-let VERTEZIES_POS = []
+let VERTICES_POS = []
 let ALIASES = []
 let EDGE_MATRIX = []
+let EDGE_HIGHLIGHT = []
+let GRAPH_TYPE = 'undirected'
+
+function load_graph_data(data) {
+    VERTICES_POS = data.VERTICES_POS
+    ALIASES = data.aliases
+    EDGE_MATRIX = data.edge_matrix
+    EDGE_HIGHLIGHT = data.edge_highlight
+    GRAPH_TYPE = data.graph_type
+}
+
+function save_graph_data(output) {
+    output.VERTICES_POS = VERTICES_POS
+    output.aliases = ALIASES
+    output.edge_highlight = EDGE_HIGHLIGHT
+    output.edge_matrix = EDGE_MATRIX
+    output.graph_type = GRAPH_TYPE
+}
 
 function add_vertex(x, y) {
 
@@ -9,15 +27,17 @@ function add_vertex(x, y) {
         y = 0
     }
 
-    VERTEZIES_POS.push([x, y])
+    VERTICES_POS.push([x, y])
     ALIASES.push(null)
 
     //add matrix row and column
     len = EDGE_MATRIX.length
     for (let i = 0; i < len; i++) {
         EDGE_MATRIX[i].push(0)
+        EDGE_HIGHLIGHT[i].push(0)
     }
     EDGE_MATRIX.push(new Array(len + 1).fill(0))
+    EDGE_HIGHLIGHT.push(new Array(len + 1).fill(0))
 
     render()
 
@@ -30,36 +50,26 @@ function remove_vertex(vertex) {
         EDGE_MATRIX[i].splice(vertex, 1)
     }
     EDGE_MATRIX.splice(vertex, 1)
-    VERTEZIES_POS.splice(vertex, 1)
+    VERTICES_POS.splice(vertex, 1)
     ALIASES.splice(vertex, 1)
 }
 
 //connect vertezies
 function toggle_edge(v1, v2) {
 
-    let value = 0
-
-    if (EDGE_MATRIX[v1][v2] == 0) {
-        value = 2
+    EDGE_MATRIX[v2][v1] = +!EDGE_MATRIX[v2][v1]
+    if (GRAPH_TYPE == 'undirected') {
+        EDGE_MATRIX[v1][v2] = +!EDGE_MATRIX[v1][v2]
     }
-
-    EDGE_MATRIX[v1][v2] = value
-    EDGE_MATRIX[v2][v1] = value
 
 }
 
 function highlight_edge(v1, v2) {
 
-    if (EDGE_MATRIX[v1][v2] == 0) return
-
-    let value = 1
-
-    if (EDGE_MATRIX[v1][v2] % 2 != 0) {
-        value = -1
+    EDGE_HIGHLIGHT[v2][v1] = +!EDGE_HIGHLIGHT[v2][v1]
+    if (GRAPH_TYPE == 'undirected') {
+        EDGE_HIGHLIGHT[v1][v2] = +!EDGE_HIGHLIGHT[v1][v2]
     }
-
-    EDGE_MATRIX[v1][v2] += value
-    EDGE_MATRIX[v2][v1] += value
 
 }
 
@@ -99,5 +109,28 @@ function generate_data(type) {
     }
 
     return "code will appear here..."
+
+}
+
+function convert_graph_type() {
+
+    if (GRAPH_TYPE == "undirected") {
+        GRAPH_TYPE = "directed"
+    }
+
+    else if (GRAPH_TYPE == "directed") {
+        for (let i = 0; i < EDGE_MATRIX.length; i++) {
+            for (let j = 0; j < EDGE_MATRIX.length; j++) {
+                if (EDGE_MATRIX[i][j]) {
+                    EDGE_MATRIX[j][i] = 1
+                }
+            }
+        }
+        GRAPH_TYPE = "undirected"
+    }
+
+    notify("converted graph to " + GRAPH_TYPE)
+    rename_convert_button()
+    render()
 
 }

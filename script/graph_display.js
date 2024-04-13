@@ -27,8 +27,8 @@ function translate_pos(x, y, output_multiplier = 1) {
 //returns the index of the edge that has been clicked
 function map_edge(x, y) {
     [x, y] = translate_pos(-x, -y, -1)
-    for (let i = 0; i < VERTEZIES_POS.length; i++) {
-        vertex = VERTEZIES_POS[i]
+    for (let i = 0; i < VERTICES_POS.length; i++) {
+        vertex = VERTICES_POS[i]
         if (vertex == null) continue
         const d = Math.sqrt((vertex[0] - x) ** 2 + (vertex[1] - y) ** 2)
         if (d <= VERTEX_RADIUS * 1.5) {
@@ -62,21 +62,65 @@ function render() {
 
     //graph edges
     for (let r = 0; r < EDGE_MATRIX.length; r++) {
-        for (let c = r; c < EDGE_MATRIX.length; c++) {
+        for (let c = 0; c < EDGE_MATRIX.length; c++) {
             if (EDGE_MATRIX[c][r] != 0) {
                 CTX.beginPath()
-                CTX.strokeStyle = EDGE_MATRIX[c][r] % 2 != 0 ? '#ef7f7f' : '#000000'
-                CTX.lineWidth = EDGE_MATRIX[c][r] % 2 == 0 ? 1 : 5
-                CTX.moveTo(...translate_pos(...VERTEZIES_POS[r]))
-                CTX.lineTo(...translate_pos(...VERTEZIES_POS[c]))
+                CTX.strokeStyle = '#000000'
+                CTX.lineWidth = 1
+                if (EDGE_HIGHLIGHT[c][r]) {
+                    CTX.strokeStyle = '#8fff7f'
+                    CTX.lineWidth = 4
+                }
+
+                const a = translate_pos(...VERTICES_POS[r])
+                const b = translate_pos(...VERTICES_POS[c])
+
+                CTX.moveTo(...a)
+                CTX.lineTo(...b)
                 CTX.stroke()
+
+                //draw direction arrows
+                if (EDGE_MATRIX[c][r] != EDGE_MATRIX[r][c]) {
+                    const density = Math.floor(Math.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2) / 100)
+                    const x = (b[0] - a[0]) / density
+                    const y = (b[1] - a[1]) / density
+                    const c = Math.sqrt(x * x + y * y)
+                    const sin = -y / c
+                    const cos = -x / c
+                    for (let i = 1; i < density; i++) {
+
+                        const radius = 8
+                        const angle = 2 * Math.PI / 3
+
+                        CTX.beginPath()
+                        CTX.moveTo(
+                            a[0] + x * i + cos * radius * 2,
+                            a[1] + y * i + sin * radius * 2
+                        )
+                        CTX.lineTo(
+                            a[0] + x * i + (cos * Math.cos(angle) - sin * Math.sin(angle)) * radius,
+                            a[1] + y * i + (sin * Math.cos(angle) + Math.sin(angle) * cos) * radius
+                        )
+                        CTX.lineTo(
+                            a[0] + x * i + (cos * Math.cos(-angle) - sin * Math.sin(-angle)) * radius,
+                            a[1] + y * i + (sin * Math.cos(-angle) + Math.sin(-angle) * cos) * radius
+                        )
+                        CTX.lineTo(
+                            a[0] + x * i + cos * radius * 2,
+                            a[1] + y * i + sin * radius * 2
+                        )
+                        CTX.fillStyle = "#7f7faf"
+                        CTX.fill()
+                    }
+                }
+
             }
         }
     }
 
     //graph vertezies
-    for (let i = 0; i < VERTEZIES_POS.length; i++) {
-        let vertex = VERTEZIES_POS[i]
+    for (let i = 0; i < VERTICES_POS.length; i++) {
+        let vertex = VERTICES_POS[i]
         if (vertex == null) continue
         //translate pos to be relational to the center
         let [x, y] = translate_pos(vertex[0], vertex[1])
@@ -85,7 +129,7 @@ function render() {
         CTX.fillStyle = (SELECTED.includes(i)) ? '#9f3f3f' : '#000000'
         CTX.fill()
         if (SETTINGS_ON.includes('show_alias')) {
-            const alias = ALIASES[i] ? ALIASES[i] : i + 1
+            const alias = ALIASES[i] ? ALIASES[i] : i
             CTX.font = "20px Arial"
             CTX.fillText(alias, x, y - 20)
         }

@@ -51,8 +51,8 @@ function on_move(e) {
     for (let el of SELECTED.filter((value, index, array) => {
         return array.indexOf(value) === index
     })) {
-        VERTEZIES_POS[el][0] += dx
-        VERTEZIES_POS[el][1] += dy
+        VERTICES_POS[el][0] += dx
+        VERTICES_POS[el][1] += dy
     }
 
     MOUSE_DOWN_POS = [e.clientX, e.clientY]
@@ -84,10 +84,10 @@ function on_up() {
                 for (let el of SELECTED.slice(0, len - 1)) {
 
                     if (SETTINGS_ON.includes('highlight')) {
-                        highlight_edge(el, recently_selected)
+                        highlight_edge(recently_selected, el)
                     }
                     else {
-                        toggle_edge(el, recently_selected)
+                        toggle_edge(recently_selected, el)
                     }
 
                     SELECTED = []
@@ -139,9 +139,9 @@ function multi_select(end_x, end_y) {
     const [w, h] = [end_x - start_x, end_y - start_y]
     let [cx, cy] = translate_pos(-start_x, -start_y, -1)
     cy -= CANVAS.offsetTop
-    for (let i = 0; i < VERTEZIES_POS.length; i++) {
-        if (VERTEZIES_POS[i] == null) continue
-        const [x, y] = VERTEZIES_POS[i]
+    for (let i = 0; i < VERTICES_POS.length; i++) {
+        if (VERTICES_POS[i] == null) continue
+        const [x, y] = VERTICES_POS[i]
         if (Math.abs(w) > Math.abs(x - cx) && Math.sign(w) === Math.sign(x - cx) && Math.abs(h) > Math.abs(y - cy) && Math.sign(h) === Math.sign(y - cy)) {
             found.push(i)
         }
@@ -294,4 +294,92 @@ function notify(message) {
             notification.style.display = 'none'
         }, 500)
     }, 3000)
+}
+
+function manage_projects(e) {
+
+    let x = e.clientX
+    let prev_selected = -1
+    let curr_selected = -1
+
+    for (let i = 0; i < this.children.length; i++) {
+        let child = this.children[i]
+        if (child.getAttribute("selected") == "1") {
+            prev_selected = i
+        }
+        if (child.offsetLeft < x && x < child.offsetLeft + child.offsetWidth) {
+            curr_selected = i
+        }
+    }
+
+    const change_name = (div) => {
+        ACCEPT_HOTKEYS = false
+        let tmp = div.innerText
+        div.innerHTML = ''
+        div.append(document.createElement("input"))
+        div.lastChild.value = tmp
+        div.lastChild.focus()
+        div.lastChild.onkeydown = (e) => {
+            if (e.code == 'Enter') {
+                const name = div.lastChild.value
+                div.innerText = name
+                ACCEPT_HOTKEYS = true
+            }
+        }
+        div.lastChild.addEventListener("focusout", () => {
+            const name = div.lastChild.value
+            div.innerText = name
+            ACCEPT_HOTKEYS = true
+        });
+    }
+
+    //change selection
+    if (prev_selected != curr_selected) {
+
+        save_graph_data(GRAPHS[prev_selected])
+        this.children[prev_selected].setAttribute("selected", "0")
+
+        //if adding new graph
+        if (curr_selected == this.children.length - 1) {
+            const tmp = this.children[curr_selected]
+            this.removeChild(this.lastChild)
+            const div = document.createElement("div")
+            this.append(div)
+
+            // name new tab
+            change_name(div)
+
+            // create new graph object
+            this.append(tmp)
+            GRAPHS.push({
+                VERTICES_POS: [],
+                aliases: [],
+                edge_highlight: [],
+                edge_matrix: [],
+                graph_type: "directed",
+            })
+        }
+
+        this.children[curr_selected].setAttribute("selected", "1")
+        load_graph_data(GRAPHS[curr_selected])
+        rename_convert_button()
+        render()
+
+    }
+
+    else {
+        if (curr_selected != this.children.length - 1) {
+            change_name(this.children[curr_selected])
+        }
+    }
+
+}
+
+function rename_convert_button() {
+    if (GRAPH_TYPE == 'directed') {
+        document.querySelector("#convert_type").innerText = "convert to undirected"
+    }
+    else if (GRAPH_TYPE == 'undirected') {
+        document.querySelector("#convert_type").innerText = "convert to directed"
+    }
 }

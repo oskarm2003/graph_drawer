@@ -5,11 +5,11 @@
     position: absolute;
 }
 
-@media (min-aspect-ratio: 6/5) {
+/* @media (min-aspect-ratio: 6/5) {
     #projects {
         left: 20%;
     }
-}
+} */
 
 #projects>div {
     font-size: 2rem;
@@ -57,16 +57,14 @@
     display: none;
     flex-direction: column;
     padding: 0.5rem;
-    outline: #ffcfcf 0.25rem solid;
+    outline: #ffcfcf 0.1rem solid;
 }
 
 #context_menu>div {
-    font-size: 1.8rem;
-    padding: 1rem 5rem;
+    font-size: 2rem;
+    padding: 0.5rem 3rem;
     text-align: center;
-    border-radius: 10px;
     color: white;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 #context_menu>div:hover {

@@ -13,19 +13,29 @@ function change_vertex_size(size) {
     render()
 }
 
-function init_canvas() {
-
-
-    CANVAS = document.querySelector('#board')
-    CANVAS.width = CANVAS.offsetWidth
-
-    //check screen orientation
+function calc_orientation() {
     const [w, h] = [window.innerWidth, window.innerHeight]
     if (w / h >= 6 / 5) {
+        ORIENTATION = 'horizontal'
+    }
+    else {
+        ORIENTATION = 'vertical'
+    }
+}
+
+function init_canvas() {
+
+    calc_orientation()
+    CANVAS = document.querySelector('#board')
+
+    //horizontal
+    if (ORIENTATION == 'horizontal') {
         CANVAS.height = CANVAS.offsetHeight
+        CANVAS.width = window.innerWidth - document.querySelector(".menu-wrapper").offsetWidth
     }
     else {
         CANVAS.height = window.innerHeight - document.querySelector('.menu-wrapper').offsetHeight
+        CANVAS.width = CANVAS.offsetWidth
     }
 
     CTX = CANVAS.getContext('2d')
@@ -45,8 +55,10 @@ function translate_virtual_pos(x, y, output_multiplier = 1) {
 }
 
 function translate_screen_pos(x, y) {
+    let gap = 0
+    if (ORIENTATION == 'horizontal') gap = document.querySelector(".menu-wrapper").offsetWidth / ZOOM
     return [
-        (x - CENTER[0]) / ZOOM,
+        (x - CENTER[0]) / ZOOM - gap,
         (y - CENTER[1]) / ZOOM
     ]
 }

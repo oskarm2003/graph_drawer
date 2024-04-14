@@ -123,6 +123,7 @@ const change_name = (div) => {
 }
 
 function map_project(x) {
+    x -= PROJECTS.offsetLeft
     for (let i = 0; i < PROJECTS.children.length; i++) {
         const child = PROJECTS.children[i]
         if (child.offsetLeft < x && x < child.offsetLeft + child.offsetWidth) {

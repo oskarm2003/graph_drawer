@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="script/graph_data.js"></script>
-    <script src="script/graph_display.js"></script>
-    <script src="script/interaction_controller.js"></script>
-    <script src="script/main.js" defer></script>
+    <script defer src="script/graph_data.js"></script>
+    <script defer src="script/graph_display.js"></script>
+    <script defer src="script/interactions/interaction_controller.js"></script>
+    <script defer src="script/interactions/projects_manager.js"></script>
+    <script defer src="script/main.js"></script>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/popups.css">
     <link rel="stylesheet" href="styles/projects_select.css">
@@ -18,7 +19,7 @@
 
     <!-- user menu -->
     <div class="menu-wrapper">
-        <h1>Graph Maker</h1>
+        <h1>GRAPH MAKER</h1>
         <div class="buttons">
             <button id="add_vertex">add vertex</button>
             <button id="delete_vertex">delete selected</button>
@@ -27,31 +28,31 @@
             <button id="save_graph">save graph</button>
 
             <div class="checkbox-wrapper">
-                <p>create on click</p>
+                <p>create on click (c)</p>
                 <div id="click_create" class="checkbox" checked="false">
                     <canvas id="checkbox_canvas"></canvas>
                 </div>
             </div>
             <div class="checkbox-wrapper">
-                <p>select last connected</p>
+                <p>select last connected (s)</p>
                 <div id="keep_selected" class="checkbox" checked="false">
                     <canvas id="checkbox_canvas"></canvas>
                 </div>
             </div>
             <div class="checkbox-wrapper">
-                <p>blank background</p>
+                <p>blank background (b)</p>
                 <div id="blank_background" class="checkbox" checked="false">
                     <canvas id="checkbox_canvas"></canvas>
                 </div>
             </div>
             <div class="checkbox-wrapper">
-                <p>show name</p>
+                <p>show name (n)</p>
                 <div id="show_alias" class="checkbox" checked="false">
                     <canvas id="checkbox_canvas"></canvas>
                 </div>
             </div>
             <div class="checkbox-wrapper">
-                <p>highlight mode</p>
+                <p>highlight mode (h)</p>
                 <div id="highlight" class="checkbox" checked="false">
                     <canvas id="checkbox_canvas"></canvas>
                 </div>
@@ -66,39 +67,54 @@
         </div>
     </div>
 
-    <!-- created projects -->
-    <div id="projects">
-        <div selected="1">undirected graph 1</div>
-        <div id="add_new"><b>+</b></div>
-    </div>
-
-    <!-- pop ups -->
-    <div id="saver" class="popup">
-        <p>save graph as...</p>
-        <select name="choose_ds" id="choose_ds">
-            <option value="-">-</option>
-            <option value="matrix">matrix</option>
-            <option value="adjacency">adjacency list</option>
-            <option value="math_object">vertices and edges</option>
-        </select>
-        <!-- <button id="generate_graph">generate data</button> -->
-        <pre><code id="code_saver">code will appear here...</code></pre>
-        <div>
-            <button id="copy_saver">copy</button>
-            <button id="exit_saver">exit</button>
+    <div class="action-wrapper">
+        <!-- context menu -->
+        <div id="context_menu" tabindex="0">
+            <div>delete</div>
+            <div>rename</div>
         </div>
+
+        <!-- created projects -->
+        <div id="projects">
+            <div selected="1">undirected graph 1</div>
+            <div id="add_new"><b>+</b></div>
+        </div>
+
+        <!-- pop ups -->
+        <div id="saver" class="popup">
+            <p>save graph as...</p>
+            <select name="choose_ds" id="choose_ds">
+                <option value="-">-</option>
+                <option value="matrix">matrix</option>
+                <option value="adjacency">adjacency list</option>
+                <option value="math_object">vertices and edges</option>
+            </select>
+            <!-- <button id="generate_graph">generate data</button> -->
+            <pre><code id="code_saver">code will appear here...</code></pre>
+            <div>
+                <button id="copy_saver">copy</button>
+                <button id="exit_saver">exit</button>
+            </div>
+        </div>
+
+        <div id="alias_input" class="popup">
+            <p>new name</p>
+            <input type="text">
+            <button>done</button>
+        </div>
+
+        <!-- zoom -->
+        <div id="zoom">zoom: 100%</div>
+
+        <div id="notification" class="popup">copied to clipboard</div>
+
+        <!-- selection -->
+        <div id="selection"></div>
+
+        <!-- main canvas -->
+        <canvas id="board"></canvas>
     </div>
 
-    <div id="alias_input" class="popup">
-        <p>new name</p>
-        <input type="text">
-        <button>done</button>
-    </div>
-
-    <div id="notification" class="popup">copied to clipboard</div>
-
-    <div id="selection"></div>
-    <canvas id="board"></canvas>
 
 </body>
 

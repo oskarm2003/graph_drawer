@@ -5,6 +5,12 @@
     position: absolute;
 }
 
+@media (min-aspect-ratio: 6/5) {
+    #projects {
+        left: 20%;
+    }
+}
+
 #projects>div {
     font-size: 2rem;
     padding: 0.5rem 2rem 0.5rem 2rem;
@@ -42,4 +48,28 @@
     font-size: 2rem;
     outline: none;
     width: 10rem;
+}
+
+#context_menu {
+    position: absolute;
+    z-index: 2;
+    background-color: #0f0f0fdf;
+    display: none;
+    flex-direction: column;
+    padding: 0.5rem;
+    outline: #ffcfcf 0.25rem solid;
+}
+
+#context_menu>div {
+    font-size: 1.8rem;
+    padding: 1rem 5rem;
+    text-align: center;
+    border-radius: 10px;
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#context_menu>div:hover {
+    background-color: #5f5f5fdf;
+    cursor: pointer;
 }

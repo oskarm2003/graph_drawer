@@ -1,6 +1,9 @@
 //GLOBALS
 let CANVAS = null
 let CTX = null
+let CENTER = [0, 0]
+let ZOOM = 1
+let ORIENTATION = 'vertical'
 
 //settings
 let VERTEX_RADIUS = 8
@@ -12,21 +15,45 @@ function change_vertex_size(size) {
 
 function init_canvas() {
 
+
     CANVAS = document.querySelector('#board')
-    CANVAS.width = window.innerWidth
-    CANVAS.height = window.innerHeight - document.querySelector('.menu-wrapper').offsetHeight
+    CANVAS.width = CANVAS.offsetWidth
+
+    //check screen orientation
+    const [w, h] = [window.innerWidth, window.innerHeight]
+    if (w / h >= 6 / 5) {
+        CANVAS.height = CANVAS.offsetHeight
+    }
+    else {
+        CANVAS.height = window.innerHeight - document.querySelector('.menu-wrapper').offsetHeight
+    }
+
     CTX = CANVAS.getContext('2d')
+
+    CENTER = [
+        Math.floor(CANVAS.width / 2),
+        Math.floor(CANVAS.height / 2)
+    ]
 
 }
 
 //translate screen pos to canvas pos
-function translate_pos(x, y, output_multiplier = 1) {
-    return [(x + Math.floor(CANVAS.width / 2)) * output_multiplier, (y + Math.floor(CANVAS.height / 2)) * output_multiplier]
+function translate_virtual_pos(x, y, output_multiplier = 1) {
+    return [
+        (x * ZOOM + CENTER[0]) * output_multiplier,
+        (y * ZOOM + CENTER[1]) * output_multiplier]
+}
+
+function translate_screen_pos(x, y) {
+    return [
+        (x - CENTER[0]) / ZOOM,
+        (y - CENTER[1]) / ZOOM
+    ]
 }
 
 //returns the index of the edge that has been clicked
 function map_edge(x, y) {
-    [x, y] = translate_pos(-x, -y, -1)
+    [x, y] = translate_screen_pos(x, y)
     for (let i = 0; i < VERTICES_POS.length; i++) {
         vertex = VERTICES_POS[i]
         if (vertex == null) continue
@@ -72,8 +99,8 @@ function render() {
                     CTX.lineWidth = 4
                 }
 
-                const a = translate_pos(...VERTICES_POS[r])
-                const b = translate_pos(...VERTICES_POS[c])
+                const a = translate_virtual_pos(...VERTICES_POS[r])
+                const b = translate_virtual_pos(...VERTICES_POS[c])
 
                 CTX.moveTo(...a)
                 CTX.lineTo(...b)
@@ -81,7 +108,10 @@ function render() {
 
                 //draw direction arrows
                 if (EDGE_MATRIX[c][r] != EDGE_MATRIX[r][c]) {
-                    const density = Math.floor(Math.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2) / 100)
+                    const density = Math.max(
+                        Math.floor(Math.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2) / 100)
+                        , 2
+                    ) / ZOOM
                     const x = (b[0] - a[0]) / density
                     const y = (b[1] - a[1]) / density
                     const c = Math.sqrt(x * x + y * y)
@@ -89,7 +119,8 @@ function render() {
                     const cos = -x / c
                     for (let i = 1; i < density; i++) {
 
-                        const radius = 8
+                        let radius = 8
+                        radius *= ZOOM
                         const angle = 2 * Math.PI / 3
 
                         CTX.beginPath()
@@ -123,14 +154,14 @@ function render() {
         let vertex = VERTICES_POS[i]
         if (vertex == null) continue
         //translate pos to be relational to the center
-        let [x, y] = translate_pos(vertex[0], vertex[1])
+        let [x, y] = translate_virtual_pos(vertex[0], vertex[1])
         CTX.beginPath()
-        CTX.arc(x, y, VERTEX_RADIUS, 0, 2 * Math.PI)
+        CTX.arc(x, y, VERTEX_RADIUS * ZOOM, 0, 2 * Math.PI)
         CTX.fillStyle = (SELECTED.includes(i)) ? '#9f3f3f' : '#000000'
         CTX.fill()
         if (SETTINGS_ON.includes('show_alias')) {
             const alias = ALIASES[i] ? ALIASES[i] : i
-            CTX.font = "20px Arial"
+            CTX.font = (20 * ZOOM) + "px Arial"
             CTX.fillText(alias, x, y - 20)
         }
     }

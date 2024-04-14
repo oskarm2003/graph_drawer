@@ -20,7 +20,11 @@ document.querySelector('#blank_background').onclick = check
 document.querySelector('#show_alias').onclick = check
 document.querySelector('#highlight').onclick = check
 document.querySelector('#projects').onclick = manage_projects
+document.querySelector('#projects').oncontextmenu = open_menu
 document.querySelector('#convert_type').onclick = convert_graph_type
+
+document.querySelector('#board').onwheel = scrolling
+
 
 //custom range
 const range_handler = () => {
@@ -80,5 +84,6 @@ document.onkeydown = (e) => {
     }
     onkeydown(e)
 }
+
 document.onkeyup = onkeyup
 window.onresize = () => { init_canvas(); render() }

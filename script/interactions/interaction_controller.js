@@ -4,6 +4,7 @@ let SELECTION_MODE = false
 let MOVED = false
 let IS_DOWN = false
 let IS_SHIFT_DOWN = false
+let IS_CTRL_DOWN = false
 let SETTINGS_ON = []
 
 function on_down(e) {
@@ -16,11 +17,11 @@ function on_down(e) {
     const detected = map_edge(x, y)
     MOUSE_DOWN_POS = [e.clientX, e.clientY]
 
-    if (detected === null) {
+    if (detected === null && !IS_CTRL_DOWN) {
         SELECTED = []
         SELECTION_MODE = true
         if (SETTINGS_ON.includes('click_create')) {
-            const new_pos = translate_pos(-x, -y, -1)
+            const new_pos = translate_screen_pos(x, y)
             add_vertex(...new_pos)
         }
     }
@@ -38,21 +39,34 @@ function on_move(e) {
     if (!IS_DOWN) return
     MOVED = true
 
+    //move the view
+    if (IS_CTRL_DOWN) {
+        const [dx, dy] = [e.clientX - MOUSE_DOWN_POS[0],
+        e.clientY - MOUSE_DOWN_POS[1]]
+        CENTER[0] += dx
+        CENTER[1] += dy
+        MOUSE_DOWN_POS = [e.clientX, e.clientY]
+        render()
+        return
+    }
+
     if (SELECTION_MODE) {
         multi_select(e.clientX, e.clientY)
         return
     }
 
+
     if (!SELECTED.slice(0, SELECTED.length - 1).includes(SELECTED[SELECTED.length - 1])) {
         SELECTED = [SELECTED.pop()]
     }
 
-    let [dx, dy] = [e.clientX - MOUSE_DOWN_POS[0], e.clientY - MOUSE_DOWN_POS[1]]
+    const [dx, dy] = [e.clientX - MOUSE_DOWN_POS[0], e.clientY - MOUSE_DOWN_POS[1]]
+
     for (let el of SELECTED.filter((value, index, array) => {
         return array.indexOf(value) === index
     })) {
-        VERTICES_POS[el][0] += dx
-        VERTICES_POS[el][1] += dy
+        VERTICES_POS[el][0] += dx / ZOOM
+        VERTICES_POS[el][1] += dy / ZOOM
     }
 
     MOUSE_DOWN_POS = [e.clientX, e.clientY]
@@ -134,11 +148,13 @@ function multi_select(end_x, end_y) {
         SELECTED = []
     }
 
-    //bad cpde
+    //map vertices inside selection
     const found = []
-    const [w, h] = [end_x - start_x, end_y - start_y]
-    let [cx, cy] = translate_pos(-start_x, -start_y, -1)
-    cy -= CANVAS.offsetTop
+    const [w, h] = [
+        (end_x - start_x) / ZOOM,
+        (end_y - start_y) / ZOOM
+    ]
+    let [cx, cy] = translate_screen_pos(start_x, start_y - CANVAS.offsetTop)
     for (let i = 0; i < VERTICES_POS.length; i++) {
         if (VERTICES_POS[i] == null) continue
         const [x, y] = VERTICES_POS[i]
@@ -159,14 +175,14 @@ function multi_select(end_x, end_y) {
 
 function onkeydown(e) {
     if (e.code == 'ShiftLeft') IS_SHIFT_DOWN = true
+    if (e.code == 'ControlLeft') IS_CTRL_DOWN = true
     if (e.code == 'Delete') delete_selected()
 }
 
 
 function onkeyup(e) {
-    if (e.code == 'ShiftLeft') {
-        IS_SHIFT_DOWN = false
-    }
+    if (e.code == 'ShiftLeft') IS_SHIFT_DOWN = false
+    if (e.code == 'ControlLeft') IS_CTRL_DOWN = false
 }
 
 function toggle_setting(setting) {
@@ -296,85 +312,6 @@ function notify(message) {
     }, 3000)
 }
 
-function manage_projects(e) {
-
-    let x = e.clientX
-    let prev_selected = -1
-    let curr_selected = -1
-
-    for (let i = 0; i < this.children.length; i++) {
-        let child = this.children[i]
-        if (child.getAttribute("selected") == "1") {
-            prev_selected = i
-        }
-        if (child.offsetLeft < x && x < child.offsetLeft + child.offsetWidth) {
-            curr_selected = i
-        }
-    }
-
-    const change_name = (div) => {
-        ACCEPT_HOTKEYS = false
-        let tmp = div.innerText
-        div.innerHTML = ''
-        div.append(document.createElement("input"))
-        div.lastChild.value = tmp
-        div.lastChild.focus()
-        div.lastChild.onkeydown = (e) => {
-            if (e.code == 'Enter') {
-                const name = div.lastChild.value
-                div.innerText = name
-                ACCEPT_HOTKEYS = true
-            }
-        }
-        div.lastChild.addEventListener("focusout", () => {
-            const name = div.lastChild.value
-            div.innerText = name
-            ACCEPT_HOTKEYS = true
-        });
-    }
-
-    //change selection
-    if (prev_selected != curr_selected) {
-
-        save_graph_data(GRAPHS[prev_selected])
-        this.children[prev_selected].setAttribute("selected", "0")
-
-        //if adding new graph
-        if (curr_selected == this.children.length - 1) {
-            const tmp = this.children[curr_selected]
-            this.removeChild(this.lastChild)
-            const div = document.createElement("div")
-            this.append(div)
-
-            // name new tab
-            change_name(div)
-
-            // create new graph object
-            this.append(tmp)
-            GRAPHS.push({
-                VERTICES_POS: [],
-                aliases: [],
-                edge_highlight: [],
-                edge_matrix: [],
-                graph_type: "directed",
-            })
-        }
-
-        this.children[curr_selected].setAttribute("selected", "1")
-        load_graph_data(GRAPHS[curr_selected])
-        rename_convert_button()
-        render()
-
-    }
-
-    else {
-        if (curr_selected != this.children.length - 1) {
-            change_name(this.children[curr_selected])
-        }
-    }
-
-}
-
 function rename_convert_button() {
     if (GRAPH_TYPE == 'directed') {
         document.querySelector("#convert_type").innerText = "convert to undirected"
@@ -382,4 +319,21 @@ function rename_convert_button() {
     else if (GRAPH_TYPE == 'undirected') {
         document.querySelector("#convert_type").innerText = "convert to directed"
     }
+}
+
+function scrolling(e) {
+    ZOOM = Math.max(
+        ZOOM + (Math.sign(-e.deltaY) * 0.1),
+        0.25)
+    ZOOM = Math.min(ZOOM, 2)
+    render()
+
+    prompt = document.querySelector("#zoom")
+    prompt.innerText = "zoom: " + Math.floor(ZOOM * 100) + "%"
+    prompt.onclick = () => {
+        ZOOM = 1
+        prompt.innerText = "zoom: " + Math.floor(ZOOM * 100) + "%"
+        render()
+    }
+
 }

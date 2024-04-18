@@ -66,11 +66,25 @@ function toggle_edge(v1, v2) {
 
 function highlight_edge(v1, v2) {
 
-    EDGE_HIGHLIGHT[v2][v1] = +!EDGE_HIGHLIGHT[v2][v1]
-    if (GRAPH_TYPE == 'undirected') {
-        EDGE_HIGHLIGHT[v1][v2] = +!EDGE_HIGHLIGHT[v1][v2]
+    if (!EDGE_MATRIX[v1][v2] && !EDGE_MATRIX[v2][v1]) {
+        notify("cannot highlight non existing edge")
+        return
     }
+    EDGE_HIGHLIGHT[v2][v1] = +!EDGE_HIGHLIGHT[v2][v1]
+    EDGE_HIGHLIGHT[v1][v2] = +!EDGE_HIGHLIGHT[v1][v2]
+}
 
+function no_highlight() {
+    for (let i = 0; i < EDGE_HIGHLIGHT.length; i++)
+        for (let j = 0; j < EDGE_HIGHLIGHT.length; j++)
+            EDGE_HIGHLIGHT[i][j] = 0
+    render()
+}
+
+function reset_names() {
+    for (let i = 0; i < ALIASES.length; i++)
+        ALIASES[i] = null
+    render()
 }
 
 function generate_data(type) {

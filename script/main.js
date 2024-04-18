@@ -22,6 +22,18 @@ document.querySelector('#highlight').onclick = check
 document.querySelector('#projects').onclick = manage_projects
 document.querySelector('#projects').oncontextmenu = open_menu
 document.querySelector('#convert_type').onclick = convert_graph_type
+document.querySelector('#reset_names').onclick = reset_names
+document.querySelector('#clear_highlight').onclick = no_highlight
+document.querySelector('#help_button').onclick = () => {
+    const HELP = document.querySelector("#help")
+    if (HELP.style.display == "block") {
+        HELP.style.display = 'none'
+    }
+    else {
+        HELP.style.display = 'block'
+    }
+}
+
 
 document.querySelector('#board').onwheel = scrolling
 

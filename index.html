@@ -27,8 +27,10 @@
             <button id="add_vertex">add vertex</button>
             <button id="delete_vertex">delete selected</button>
             <button id="change_alias">rename selected</button>
+            <button id="reset_names">reset names</button>
+            <button id="clear_highlight">clear highlight</button>
             <button id="convert_type">convert to directed</button>
-            <button id="save_graph">save graph</button>
+            <button id="save_graph">save graph data</button>
 
             <div class="checkbox-wrapper">
                 <p>create on click (c)</p>
@@ -67,10 +69,78 @@
                 </div>
                 <p>10</p>
             </div>
+
+            <button id="help_button">?</button>
         </div>
     </div>
 
     <div class="action-wrapper">
+
+        <!-- help -->
+        <div id="help">
+            <h2>About:</h2>
+            <p>With this application you can easily draw graphs and save them as an image or as the text data.</p>
+
+            <h2>Creating:</h2>
+            <p>The base of every graph is a <b>vertex</b>.
+                <br>You can create a vertex in the center of the board by clicking the button saying "add vertex".
+                <br>Alternatively, you can select the "create on click" option to start creating a new vertex each time
+                you
+                click on an empty space on the board.
+                <br /><br />
+                Each pair of vertices can be joined by an <b>edge</b>.
+                To create an edge between vertices, select at least one vertex and click on another, unselected one.
+            </p>
+
+            <h2>Selection:</h2>
+            <p>Click on an unselected vertex to select it. <br>
+                While holding the <b>shift key</b>, click on selected vertices to unselect them. <br>
+                Click and drag on an empty space to enable the <b>selection zone</b>. Vertices within the selection zone
+                will be selected.
+
+            </p>
+
+            <h2>Graph types:</h2>
+            <p>You can create two different types of graphs.
+                <br>
+                <b>An undirected graph</b> has edges with no specified direction, thus the edge between vertices a and b
+                is the same as between b and a.
+                <br>
+                <b>Directed graph's</b> edges respect the direction, so the edge from vertex a to b is not the same as
+                from b to a.
+                <br>
+                Click the "convert to [un]directed" button to change the graph type.
+            </p>
+
+            <h2>Deleting:</h2>
+            <p>Selected vertices can be deleted by clicking the "delete selected" button or keyboard "Del" button.
+                Deleting the vertex will also remove all the edges joined to it.
+                <br>To delete an edge between a pair of vertices (u, v), select the vertex u and click on vertex v.
+            </p>
+
+            <h2>Highlight mode:</h2>
+            <p>When highlight mode is on, existing edges can be highlighted by selecting and clicking the respective
+                vertices.
+                New connections between vertices cannot be
+                established in this mode.</p>
+
+            <h2>Moving on board:</h2>
+            <p>You can zoom the view in and out by using mouse wheel.
+                <br>
+                You can move the entire scene
+                by dragging the board while holding the left control button.
+            </p>
+
+            <h2>Saving the graph:</h2>
+            <p>You can save created graph as an image by clicking the right mouse button on the board
+                and selecting the "save image as..." option.
+                <br>
+                Click "save graph data" and select desired format to save the graph as a text data.
+            </p>
+
+            <div id="bottom"></div>
+        </div>
+
         <!-- context menu -->
         <div id="context_menu" tabindex="0">
             <div>delete</div>

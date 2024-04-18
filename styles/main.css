@@ -8,13 +8,12 @@ html {
 }
 
 body {
-    overflow: hidden;
     height: 100vh;
+    overflow: hidden;
 
 }
 
 .menu-wrapper {
-    /* padding: 2rem; */
     background-color: #cfcfcf;
     border-bottom: dashed 0.2rem black;
     display: flex;
@@ -23,6 +22,7 @@ body {
     position: relative;
     z-index: 5;
 }
+
 
 @media (min-aspect-ratio: 6/5) {
 
@@ -33,9 +33,10 @@ body {
     .menu-wrapper {
         height: 100%;
         width: fit-content;
-        position: static;
+        position: relative;
         padding: 5rem;
         border-right: dashed 0.2rem black;
+        overflow: scroll;
     }
 
     .menu-wrapper .buttons {
@@ -63,9 +64,9 @@ body {
 }
 
 h1 {
-    font-size: 4rem;
+    font-size: 5rem;
     text-align: center;
-    margin: 3rem;
+    margin: 2rem;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     color: #3f0f0fdf
 }
@@ -203,4 +204,37 @@ div#alias_input>input {
 
 div#alias_input>input:focus {
     outline: none;
+}
+
+#help_button {
+    border-radius: 5px;
+    color: white;
+    background-color: #0f0f0fdf;
+    border: none;
+}
+
+#help_button:hover {
+    background-color: #2a2a2adf;
+}
+
+#help {
+    display: none;
+    font-size: 2rem;
+    height: 100vh;
+    max-width: 35rem;
+    padding: 0 5rem 10rem 5rem;
+    position: absolute;
+    z-index: 1;
+    background-color: #3f3f3fdf;
+    overflow-y: scroll;
+    color: white;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#help>h2 {
+    margin: 2rem;
+}
+
+#help>#bottom {
+    height: 30rem;
 }

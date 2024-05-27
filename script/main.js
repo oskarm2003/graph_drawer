@@ -40,18 +40,14 @@ document.querySelector('#highlight-vertices').onclick = highlight_selected_verti
 document.querySelector('#clear_highlight').onclick = no_highlight
 
 // internal script
+document.querySelector('#go-to-script').onclick = () => {
+    document.querySelector("#script-tab").click()
+}
 document.querySelector('#run-script').onclick = run_script
+document.querySelector('#clear-console').onclick = clear
 
 //help
-document.querySelector('#help_button').onclick = () => {
-    const HELP = document.querySelector("#help")
-    if (HELP.style.display == "block") {
-        HELP.style.display = 'none'
-    }
-    else {
-        HELP.style.display = 'block'
-    }
-}
+document.querySelector('#help_button').onclick = () => document.querySelector("#help-tab").click()
 
 
 document.querySelector('#board').onwheel = scrolling

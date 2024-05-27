@@ -13,227 +13,274 @@
     <script defer src="script/interactions/projects_manager.js"></script>
     <script defer src="script/interactions/internal_script/text_editor.js"></script>
     <script defer src="script/interactions/internal_script/interpreter.js"></script>
+    <script defer src="script/interactions/ui_menu.js"></script>
     <script defer src="script/main.js"></script>
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/menu/main.css">
+    <link rel="stylesheet" href="styles/menu/script_menu.css">
+    <link rel="stylesheet" href="styles/menu/settings_menu.css">
+    <link rel="stylesheet" href="styles/menu/help.css">
     <link rel="stylesheet" href="styles/popups.css">
     <link rel="stylesheet" href="styles/projects_select.css">
-    <link rel="stylesheet" href="styles/help.css">
     <link rel="stylesheet" href="styles/fonts.css">
     <title>Graph Maker</title>
 </head>
 
 <body>
 
-    <!-- user menu -->
-    <div class="menu-wrapper">
-        <h1>Grapher</h1>
+    <div class="ui-wrapper">
 
-        <!-- <div class="menu-tabs">
-            <div>menu</div>
-            <div>script</div>
-        </div> -->
+        <!-- user menu -->
+        <div class="menu-wrapper">
+            <h1>Grapher</h1>
 
-        <div class="buttons">
-
-            <!-- configure graph -->
-            <h2>configure graph</h2>
-            <button id="convert_type">convert to directed</button>
-            <button id="save_graph">export</button>
-            <p>you can save your graph in text format</p>
-            <hr>
-
-            <!-- vertices and edges -->
-            <h2>manage vertices and edges</h2>
-
-            <button id="add_vertex">add vertex</button>
-            <button id="delete_vertex">delete selected</button>
-
-            <div class="checkbox-wrapper">
-                <p>create on click (c)</p>
-                <div id="click_create" class="checkbox" checked="false">
-                    <canvas id="checkbox_canvas"></canvas>
+            <div class="menu-tabs">
+                <div selected="true" id="menu-tab">
+                    <p>menu</p>
+                </div>
+                <div id="script-tab">
+                    <p>script</p>
+                </div>
+                <div id="help-tab">
+                    <p>help</p>
                 </div>
             </div>
 
-            <div class="checkbox-wrapper">
-                <p>select last connected (s)</p>
-                <div id="keep_selected" class="checkbox" checked="false">
-                    <canvas id="checkbox_canvas"></canvas>
+            <div class="buttons">
+
+                <!-- configure graph -->
+                <h2>configure graph</h2>
+                <button id="convert_type">convert to directed</button>
+                <button id="save_graph">export</button>
+                <p>you can save your graph in text format</p>
+                <hr>
+
+                <!-- vertices and edges -->
+                <h2>manage vertices and edges</h2>
+
+                <button id="add_vertex">add vertex</button>
+                <button id="delete_vertex">delete selected</button>
+
+                <div class="checkbox-wrapper">
+                    <p>create on click (c)</p>
+                    <div id="click_create" class="checkbox" checked="false">
+                        <canvas id="checkbox_canvas"></canvas>
+                    </div>
+                </div>
+
+                <div class="checkbox-wrapper">
+                    <p>select last connected (s)</p>
+                    <div id="keep_selected" class="checkbox" checked="false">
+                        <canvas id="checkbox_canvas"></canvas>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- highlighting -->
+                <h2>highlighting</h2>
+
+                <div class="checkbox-wrapper">
+                    <p>highlight color</p>
+                    <input class="checkbox" type="color" name="highlight-color" id="highlight-color">
+                </div>
+
+                <p>this color applies to new highlights only</p>
+
+                <button id="highlight-vertices">highlight selected vertices</button>
+
+                <div class="checkbox-wrapper">
+                    <p>vertex highlight mode (v)</p>
+                    <div id="vertex-highlight-mode" class="checkbox" checked="false">
+                        <canvas id="checkbox_canvas"></canvas>
+                    </div>
+                </div>
+
+                <div class="checkbox-wrapper">
+                    <p>edge highlight mode (e)</p>
+                    <div id="edge-highlight-mode" class="checkbox" checked="false">
+                        <canvas id="checkbox_canvas"></canvas>
+                    </div>
+                </div>
+
+                <button id="clear_highlight">clear highlight</button>
+
+                <hr>
+
+                <!-- naming -->
+                <h2>naming</h2>
+                <div class="checkbox-wrapper">
+                    <p>show name (n)</p>
+                    <div id="show_alias" class="checkbox" checked="false">
+                        <canvas id="checkbox_canvas"></canvas>
+                    </div>
+                </div>
+                <button id="change_alias">rename selected</button>
+                <button id="reset_names">reset names</button>
+                <p>default names are indexes starting from 0</p>
+                <hr>
+
+                <!-- displaying -->
+                <h2>display settings</h2>
+
+                <div class="checkbox-wrapper" id="size">
+                    <p>vertex size</p>
+                    <div class="range">
+                        <div></div>
+                    </div>
+                    <p id="size-prompt">10</p>
+                </div>
+
+                <div class="checkbox-wrapper">
+                    <p>blank background (b)</p>
+                    <div id="blank_background" class="checkbox" checked="false">
+                        <canvas id="checkbox_canvas"></canvas>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- scripting -->
+                <h2>custom scripts</h2>
+                <p>you can write a custom script that interacts with your graph</p>
+
+                <button id="go-to-script">write script</button>
+
+                <hr>
+
+                <!-- help -->
+                <h2>help</h2>
+                <button id="help_button">?</button>
+            </div>
+
+            <div class="script-wrapper">
+
+                <!-- scripting -->
+                <h2>custom scripts</h2>
+                <p>you can write a custom script that interacts with your graph</p>
+
+                <textarea spellcheck="false" name="internal-script" id="internal-script"></textarea>
+                <button id="run-script">run</button>
+
+                <div class="gap"></div>
+
+                <h2>console</h2>
+                <code id="internal-console"></code>
+                <button id="clear-console">clear console</button>
+                <hr>
+                <h2>manual</h2>
+                <div class="script-doc">
+                    <p>In the manual below "console" refers to the element on the page below the text editor. <br />
+                        The script has to be written in JavaScript.
+                        You can use dedicated functions that allow you to interact with the created graph, such as:
+                        <br />
+                    </p>
+                    <ul>
+                        <li><b>print( string )</b> - prints text to the console. Takes string as a paremeter.
+                        </li>
+                        <li><b>clear( )</b> - clears the console.</li>
+                        <li><b>highlightVertex( v, color, ?time )</b> - highlights vertex of index "v" to color "color"
+                            (in hex) for
+                            "time" miliseconds. If parameter "time" is undefined, the vertex is highlighted forever.
+                        </li>
+                        <li><b>highlightEdge( u, v, color, ?time )</b> - highlights edge beetwen vertices "u" and "v" to
+                            color
+                            "color" (in hex) for "time" miliseconds. If parameter "time" is undefined, the edge is
+                            highlighted forever.</li>
+                        <li><b>getGraph( type )</b> - returns currently opened graph in the format provided in "type".
+                            Accepted types: "matrix" | "adjacency list" | "vertices" | "edges".</li>
+                        <li><b>sleep( time )</b> - suspends script's runtime for "time" miliseconds. In JavaScript you
+                            must
+                            use it with await (ex: await sleep(115))</li>
+                    </ul>
                 </div>
             </div>
-
-            <hr>
-
-            <!-- highlighting -->
-            <h2>highlighting</h2>
-
-            <div class="checkbox-wrapper">
-                <p>highlight color</p>
-                <input class="checkbox" type="color" name="highlight-color" id="highlight-color">
-            </div>
-
-            <p>this color applies to new highlights only</p>
-
-            <button id="highlight-vertices">highlight selected vertices</button>
-
-            <div class="checkbox-wrapper">
-                <p>vertex highlight mode (v)</p>
-                <div id="vertex-highlight-mode" class="checkbox" checked="false">
-                    <canvas id="checkbox_canvas"></canvas>
-                </div>
-            </div>
-
-            <div class="checkbox-wrapper">
-                <p>edge highlight mode (e)</p>
-                <div id="edge-highlight-mode" class="checkbox" checked="false">
-                    <canvas id="checkbox_canvas"></canvas>
-                </div>
-            </div>
-
-            <button id="clear_highlight">clear highlight</button>
-
-            <hr>
-
-            <!-- naming -->
-            <h2>naming</h2>
-            <div class="checkbox-wrapper">
-                <p>show name (n)</p>
-                <div id="show_alias" class="checkbox" checked="false">
-                    <canvas id="checkbox_canvas"></canvas>
-                </div>
-            </div>
-            <button id="change_alias">rename selected</button>
-            <button id="reset_names">reset names</button>
-            <p>default names are indexes starting from 0</p>
-            <hr>
-
-            <!-- displaying -->
-            <h2>display settings</h2>
-
-            <div class="checkbox-wrapper" id="size">
-                <p>vertex size</p>
-                <div class="range">
-                    <div></div>
-                </div>
-                <p id="size-prompt">10</p>
-            </div>
-
-            <div class="checkbox-wrapper">
-                <p>blank background (b)</p>
-                <div id="blank_background" class="checkbox" checked="false">
-                    <canvas id="checkbox_canvas"></canvas>
-                </div>
-            </div>
-
-            <hr>
-
-            <!-- scripting -->
-            <h2>custom scripts</h2>
-            <p>you can write a custom script that interacts with your graph</p>
-
-            <!-- <p class="interactive" id="expand-documentation"> --expand documentation-- </p>
-            <div class="script-description">
-                <p>The script has to be written in JavaScript or Python. <br />
-                    You can use dedicated functions that allow you to interact with the created graph, such as:
-                    <br />
-                </p>
-                <ul>
-                    <li>print( string ) - prints text to the internal console below. Takes string as a paremeter
-                    </li>
-                    <li>highlightVertex( vertex_index, color, ?highlight_time ) - highlights</li>
-                </ul>
-            </div> -->
-
-            <textarea spellcheck="false" name="internal-script" id="internal-script"></textarea>
-            <button id="run-script">run</button>
-            <hr>
 
             <!-- help -->
-            <h2>help</h2>
-            <button id="help_button">?</button>
-        </div>
+            <div id="help">
+                <h2>About:</h2>
+                <p>With this application you can easily draw graphs and save them as an image or as the text data.</p>
 
-        <div class="script-wrapper"></div>
+                <h2>Creating:</h2>
+                <p>The base of every graph is a <b>vertex</b>.
+                    <br>You can create a vertex in the center of the board by clicking the button saying "add vertex".
+                    <br>Alternatively, you can select the "create on click" option to start creating a new vertex each
+                    time
+                    you
+                    click on an empty space on the board.
+                    <br /><br />
+                    Each pair of vertices can be joined by an <b>edge</b>.
+                    To create an edge between vertices, select at least one vertex and click on another, unselected one.
+                </p>
 
-    </div>
+                <h2>Selection:</h2>
+                <p>Click on an unselected vertex to select it. <br>
+                    While holding the <b>shift key</b>, click on selected vertices to unselect them. <br>
+                    Click and drag on an empty space to enable the <b>selection zone</b>. Vertices within the selection
+                    zone
+                    will be selected.
 
-    <div class="action-wrapper">
+                </p>
 
-        <!-- help -->
-        <div id="help">
-            <h2>About:</h2>
-            <p>With this application you can easily draw graphs and save them as an image or as the text data.</p>
+                <h2>Graph types:</h2>
+                <p>You can create two different types of graphs.
+                    <br>
+                    <b>An undirected graph</b> has edges with no specified direction, thus the edge between vertices a
+                    and b
+                    is the same as between b and a.
+                    <br>
+                    <b>Directed graph's</b> edges respect the direction, so the edge from vertex a to b is not the same
+                    as
+                    from b to a.
+                    <br>
+                    Click the "convert to [un]directed" button to change the graph type.
+                </p>
 
-            <h2>Creating:</h2>
-            <p>The base of every graph is a <b>vertex</b>.
-                <br>You can create a vertex in the center of the board by clicking the button saying "add vertex".
-                <br>Alternatively, you can select the "create on click" option to start creating a new vertex each time
-                you
-                click on an empty space on the board.
-                <br /><br />
-                Each pair of vertices can be joined by an <b>edge</b>.
-                To create an edge between vertices, select at least one vertex and click on another, unselected one.
-            </p>
+                <h2>Deleting:</h2>
+                <p>Selected vertices can be deleted by clicking the "delete selected" button or keyboard "Del" button.
+                    Deleting the vertex will also remove all the edges joined to it.
+                    <br>To delete an edge between a pair of vertices (u, v), select the vertex u and click on vertex v.
+                </p>
 
-            <h2>Selection:</h2>
-            <p>Click on an unselected vertex to select it. <br>
-                While holding the <b>shift key</b>, click on selected vertices to unselect them. <br>
-                Click and drag on an empty space to enable the <b>selection zone</b>. Vertices within the selection zone
-                will be selected.
+                <h2>Highlight mode:</h2>
+                <p>When highlight mode is on, existing edges can be highlighted by selecting and clicking the respective
+                    vertices.
+                    New connections between vertices cannot be
+                    established in this mode.</p>
 
-            </p>
+                <h2>Moving on board:</h2>
+                <p>You can zoom the view in and out by using mouse wheel.
+                    <br>
+                    You can move the entire scene
+                    by dragging the board while holding the left control button.
+                </p>
 
-            <h2>Graph types:</h2>
-            <p>You can create two different types of graphs.
-                <br>
-                <b>An undirected graph</b> has edges with no specified direction, thus the edge between vertices a and b
-                is the same as between b and a.
-                <br>
-                <b>Directed graph's</b> edges respect the direction, so the edge from vertex a to b is not the same as
-                from b to a.
-                <br>
-                Click the "convert to [un]directed" button to change the graph type.
-            </p>
+                <h2>Saving the graph:</h2>
+                <p>You can save created graph as an image by clicking the right mouse button on the board
+                    and selecting the "save image as..." option.
+                    <br>
+                    Click "save graph data" and select desired format to save the graph as a text data.
+                </p>
 
-            <h2>Deleting:</h2>
-            <p>Selected vertices can be deleted by clicking the "delete selected" button or keyboard "Del" button.
-                Deleting the vertex will also remove all the edges joined to it.
-                <br>To delete an edge between a pair of vertices (u, v), select the vertex u and click on vertex v.
-            </p>
+                <div id="bottom"></div>
+            </div>
 
-            <h2>Highlight mode:</h2>
-            <p>When highlight mode is on, existing edges can be highlighted by selecting and clicking the respective
-                vertices.
-                New connections between vertices cannot be
-                established in this mode.</p>
-
-            <h2>Moving on board:</h2>
-            <p>You can zoom the view in and out by using mouse wheel.
-                <br>
-                You can move the entire scene
-                by dragging the board while holding the left control button.
-            </p>
-
-            <h2>Saving the graph:</h2>
-            <p>You can save created graph as an image by clicking the right mouse button on the board
-                and selecting the "save image as..." option.
-                <br>
-                Click "save graph data" and select desired format to save the graph as a text data.
-            </p>
-
-            <div id="bottom"></div>
-        </div>
-
-        <!-- context menu -->
-        <div id="context_menu" tabindex="0">
-            <div>delete</div>
-            <div>rename</div>
         </div>
 
         <!-- created projects -->
         <div id="projects">
             <div selected="1">undirected graph 1</div>
             <div id="add_new"><b>+</b></div>
+        </div>
+
+    </div>
+
+
+    <div class="action-wrapper">
+
+        <!-- context menu -->
+        <div id="context_menu" tabindex="0">
+            <div>delete</div>
+            <div>rename</div>
         </div>
 
         <!-- pop ups -->

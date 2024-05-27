@@ -1,0 +1,29 @@
+#help_button {
+    border-radius: 5px;
+    color: white;
+    background-color: #0f0f0fdf;
+    border: none;
+}
+
+#help_button:hover {
+    background-color: #2a2a2adf;
+}
+
+#help {
+    max-width: 50rem;
+
+    display: none;
+    flex-direction: column;
+
+    font-size: 2rem;
+    padding: 0 5rem 10rem 5rem;
+    color: #3f3f3f;
+    font-family: Lato;
+}
+
+#help>h2 {
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+    font-weight: bold;
+    color: #7f7fcf
+}

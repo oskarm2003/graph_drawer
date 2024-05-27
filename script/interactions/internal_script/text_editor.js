@@ -65,8 +65,23 @@ script_input.onkeydown = (e) => {
 }
 
 function autoResize() {
-    script_input.style.height = Math.max(script_input.scrollHeight, 500) + "px"
-    script_input.style.width = Math.max(script_input.scrollWidth, 400) + "px"
+    let base_font_size = window.getComputedStyle(document.body).getPropertyValue("font-size")
+    base_font_size = parseInt(base_font_size.slice(0, base_font_size.length - 2));
+
+    script_input.style.height = Math.min(
+        Math.max(
+            20 * base_font_size,
+            script_input.scrollHeight
+        ),
+        80 * base_font_size) + "px"
+
+    script_input.style.width = Math.min(
+        Math.max(
+            30 * base_font_size,
+            script_input.scrollWidth
+        ),
+        70 * base_font_size) + "px"
 }
 
-// autoResize()
+script_input.textContent = "// example code - BFS\n\nconst G = getGraph(\"adjacency list\")\nconst visited = new Array(G.length).fill(false)\nconst queue = []\nqueue.push(0)\n\n// only for better algorithm visualization\nlet curr_queue = []\nlet depth = 0\n\nwhile (queue.length != 0 || curr_queue.length != 0) {\n\t\n\tif (curr_queue.length == 0) {\n\t\tcurr_queue = [...queue]\n\t\tqueue.length = 0\n\t\tprint(++depth)\n\t\tawait sleep(500)\n\t}\n\n\tconst v = curr_queue.shift()\n    \n   \tif (visited[v])\n\t\tcontinue\n    \n    \tvisited[v] = true\n\thighlightVertex(v,\"#3f8fff\")\n\t\n\tfor (const u of G[v]) {\n\t\tif (!visited[u])\n\t\t\tqueue.push(u)\n\t}\n\nprint(\"graph's depth is \" + depth)}"
+autoResize()

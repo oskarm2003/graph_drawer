@@ -13,7 +13,7 @@ function on_down(e) {
 
     IS_DOWN = true
 
-    const [x, y] = [e.clientX, e.clientY - CANVAS.offsetTop]
+    const [x, y] = [e.clientX + CANVAS.offsetLeft, e.clientY - CANVAS.offsetTop]
     const detected = map_edge(x, y)
     MOUSE_DOWN_POS = [e.clientX, e.clientY]
 

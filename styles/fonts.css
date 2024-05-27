@@ -7,14 +7,14 @@
 
 @font-face {
     font-family: Lato;
-    font-weight: bold;
+    font-weight: 700;
     font-style: normal;
-    src: url(../assets/fonts/Lato-Bold-e82542ae.ttf);
+    src: url(../assets/fonts/Lato-Bold-d7f0b7f2.ttf);
 }
 
 @font-face {
     font-family: Lato;
     font-weight: 400;
     font-style: italic;
-    src: url(../assets/fonts/Lato-Italic-e82542ae.ttf);
+    src: url(../assets/fonts/Lato-Italic-3be26bf6);
 }

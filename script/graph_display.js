@@ -58,7 +58,8 @@ function translate_virtual_pos(x, y, output_multiplier = 1) {
 }
 
 function translate_screen_pos(x, y) {
-    gap = document.querySelector(".menu-wrapper").offsetWidth / ZOOM
+    // gap = document.querySelector(".menu-wrapper").offsetWidth / ZOOM
+    gap = 0
     return [
         (x - CENTER[0]) / ZOOM - gap,
         (y - CENTER[1]) / ZOOM

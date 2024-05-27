@@ -1,8 +1,10 @@
 #projects {
     width: fit-content;
+    height: fit-content;
     display: flex;
     z-index: 0;
-    position: absolute;
+    text-wrap: nowrap;
+    /* position: absolute; */
 }
 
 /* @media (min-aspect-ratio: 6/5) {
@@ -12,7 +14,6 @@
 } */
 
 #projects>div {
-    font-size: 2rem;
     padding: 0.5rem 2rem 0.5rem 2rem;
     border: 1px solid #707070;
     border-top: 0;
@@ -23,6 +24,9 @@
     transform: translateY(-15%);
     z-index: 0;
     user-select: none;
+
+    font-family: Lato;
+    font-size: 2rem;
 }
 
 #projects>div:hover {

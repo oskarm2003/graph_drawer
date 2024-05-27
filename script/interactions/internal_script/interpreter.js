@@ -1,5 +1,6 @@
 function run_script() {
     const script = preProcess(script_input.value)
+    console.log(JSON.stringify(script))
     eval("(async function () {" + script + "})();")
 }
 
@@ -34,10 +35,14 @@ function preProcess(script) {
 
 // functions to use in internal script:
 
-function print([...args]) {
-    for (let arg of args) {
-        console.log(arg);
-    }
+function print(string) {
+    const internal_console = document.querySelector("#internal-console")
+    internal_console.innerText += string + "\n"
+}
+
+function clear() {
+    const internal_console = document.querySelector("#internal-console")
+    internal_console.innerText = ""
 }
 
 function sleep(time) {

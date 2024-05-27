@@ -28,6 +28,10 @@ function on_down(e) {
 
     if (detected != null) {
         //vertex detected
+        if (SETTINGS_ON.includes('vertex-highlight-mode')) {
+            const color = document.querySelector('#highlight-color').value
+            highlight_vertex(detected, color)
+        }
         SELECTED.push(detected)
     }
 
@@ -97,8 +101,9 @@ function on_up() {
             else if (len > 1 && !IS_SHIFT_DOWN) {
                 for (let el of SELECTED.slice(0, len - 1)) {
 
-                    if (SETTINGS_ON.includes('highlight')) {
-                        highlight_edge(recently_selected, el)
+                    if (SETTINGS_ON.includes('edge-highlight-mode')) {
+                        const color = document.querySelector("#highlight-color").value
+                        highlight_edge(recently_selected, el, color)
                     }
                     else {
                         toggle_edge(recently_selected, el)
@@ -208,6 +213,16 @@ function delete_selected() {
             if (unique[j] > unique[i]) unique[j]--
         }
     }
+    SELECTED = []
+    render()
+}
+
+function highlight_selected_vertices() {
+    //possibly unique selected needed (omitted for now)
+    const color = document.querySelector("#highlight-color").value
+    for (let el of SELECTED)
+        highlight_vertex(el, color)
+
     SELECTED = []
     render()
 }

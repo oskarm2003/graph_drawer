@@ -11,10 +11,14 @@
     <script defer src="script/graph_display.js"></script>
     <script defer src="script/interactions/interaction_controller.js"></script>
     <script defer src="script/interactions/projects_manager.js"></script>
+    <script defer src="script/interactions/internal_script/text_editor.js"></script>
+    <script defer src="script/interactions/internal_script/interpreter.js"></script>
     <script defer src="script/main.js"></script>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/popups.css">
     <link rel="stylesheet" href="styles/projects_select.css">
+    <link rel="stylesheet" href="styles/help.css">
+    <link rel="stylesheet" href="styles/fonts.css">
     <title>Graph Maker</title>
 </head>
 
@@ -22,15 +26,27 @@
 
     <!-- user menu -->
     <div class="menu-wrapper">
-        <h1>GRAPH MAKER</h1>
+        <h1>Grapher</h1>
+
+        <!-- <div class="menu-tabs">
+            <div>menu</div>
+            <div>script</div>
+        </div> -->
+
         <div class="buttons">
+
+            <!-- configure graph -->
+            <h2>configure graph</h2>
+            <button id="convert_type">convert to directed</button>
+            <button id="save_graph">export</button>
+            <p>you can save your graph in text format</p>
+            <hr>
+
+            <!-- vertices and edges -->
+            <h2>manage vertices and edges</h2>
+
             <button id="add_vertex">add vertex</button>
             <button id="delete_vertex">delete selected</button>
-            <button id="change_alias">rename selected</button>
-            <button id="reset_names">reset names</button>
-            <button id="clear_highlight">clear highlight</button>
-            <button id="convert_type">convert to directed</button>
-            <button id="save_graph">save graph data</button>
 
             <div class="checkbox-wrapper">
                 <p>create on click (c)</p>
@@ -38,40 +54,107 @@
                     <canvas id="checkbox_canvas"></canvas>
                 </div>
             </div>
+
             <div class="checkbox-wrapper">
                 <p>select last connected (s)</p>
                 <div id="keep_selected" class="checkbox" checked="false">
                     <canvas id="checkbox_canvas"></canvas>
                 </div>
             </div>
+
+            <hr>
+
+            <!-- highlighting -->
+            <h2>highlighting</h2>
+
             <div class="checkbox-wrapper">
-                <p>blank background (b)</p>
-                <div id="blank_background" class="checkbox" checked="false">
+                <p>highlight color</p>
+                <input class="checkbox" type="color" name="highlight-color" id="highlight-color">
+            </div>
+
+            <p>this color applies to new highlights only</p>
+
+            <button id="highlight-vertices">highlight selected vertices</button>
+
+            <div class="checkbox-wrapper">
+                <p>vertex highlight mode (v)</p>
+                <div id="vertex-highlight-mode" class="checkbox" checked="false">
                     <canvas id="checkbox_canvas"></canvas>
                 </div>
             </div>
+
+            <div class="checkbox-wrapper">
+                <p>edge highlight mode (e)</p>
+                <div id="edge-highlight-mode" class="checkbox" checked="false">
+                    <canvas id="checkbox_canvas"></canvas>
+                </div>
+            </div>
+
+            <button id="clear_highlight">clear highlight</button>
+
+            <hr>
+
+            <!-- naming -->
+            <h2>naming</h2>
             <div class="checkbox-wrapper">
                 <p>show name (n)</p>
                 <div id="show_alias" class="checkbox" checked="false">
                     <canvas id="checkbox_canvas"></canvas>
                 </div>
             </div>
-            <div class="checkbox-wrapper">
-                <p>highlight mode (h)</p>
-                <div id="highlight" class="checkbox" checked="false">
-                    <canvas id="checkbox_canvas"></canvas>
-                </div>
-            </div>
+            <button id="change_alias">rename selected</button>
+            <button id="reset_names">reset names</button>
+            <p>default names are indexes starting from 0</p>
+            <hr>
+
+            <!-- displaying -->
+            <h2>display settings</h2>
+
             <div class="checkbox-wrapper" id="size">
                 <p>vertex size</p>
                 <div class="range">
                     <div></div>
                 </div>
-                <p>10</p>
+                <p id="size-prompt">10</p>
             </div>
 
+            <div class="checkbox-wrapper">
+                <p>blank background (b)</p>
+                <div id="blank_background" class="checkbox" checked="false">
+                    <canvas id="checkbox_canvas"></canvas>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- scripting -->
+            <h2>custom scripts</h2>
+            <p>you can write a custom script that interacts with your graph</p>
+
+            <!-- <p class="interactive" id="expand-documentation"> --expand documentation-- </p>
+            <div class="script-description">
+                <p>The script has to be written in JavaScript or Python. <br />
+                    You can use dedicated functions that allow you to interact with the created graph, such as:
+                    <br />
+                </p>
+                <ul>
+                    <li>print( string ) - prints text to the internal console below. Takes string as a paremeter
+                    </li>
+                    <li>highlightVertex( vertex_index, color, ?highlight_time ) - highlights</li>
+                </ul>
+            </div> -->
+
+            <textarea spellcheck="false" name="internal-script" id="internal-script"></textarea>
+            <button id="run-script">run</button>
+            <hr>
+
+            <!-- help -->
+            <h2>help</h2>
             <button id="help_button">?</button>
         </div>
+
+        <div class="script-wrapper"></div>
+
     </div>
 
     <div class="action-wrapper">

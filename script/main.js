@@ -10,20 +10,39 @@ GRAPHS = [
 
 init_canvas()
 render()
+
+//basic edge and vertex managment
 document.querySelector('#add_vertex').onclick = add_vertex
 document.querySelector('#delete_vertex').onclick = delete_selected
-document.querySelector('#change_alias').onclick = change_alias
-document.querySelector('#save_graph').onclick = open_saver
 document.querySelector('#click_create').onclick = check
 document.querySelector('#keep_selected').onclick = check
+
+//graph data
+document.querySelector('#save_graph').onclick = open_saver
+document.querySelector('#convert_type').onclick = convert_graph_type
+
+//display
 document.querySelector('#blank_background').onclick = check
-document.querySelector('#show_alias').onclick = check
-document.querySelector('#highlight').onclick = check
+
+//projects
 document.querySelector('#projects').onclick = manage_projects
 document.querySelector('#projects').oncontextmenu = open_menu
-document.querySelector('#convert_type').onclick = convert_graph_type
+
+//naming
+document.querySelector('#show_alias').onclick = check
 document.querySelector('#reset_names').onclick = reset_names
+document.querySelector('#change_alias').onclick = change_alias
+
+//highlighting
+document.querySelector('#edge-highlight-mode').onclick = check
+document.querySelector('#vertex-highlight-mode').onclick = check
+document.querySelector('#highlight-vertices').onclick = highlight_selected_vertices
 document.querySelector('#clear_highlight').onclick = no_highlight
+
+// internal script
+document.querySelector('#run-script').onclick = run_script
+
+//help
 document.querySelector('#help_button').onclick = () => {
     const HELP = document.querySelector("#help")
     if (HELP.style.display == "block") {
@@ -88,8 +107,11 @@ document.onkeydown = (e) => {
         case 'KeyB':
             document.querySelector('#blank_background').click()
             break
-        case 'KeyH':
-            document.querySelector('#highlight').click()
+        case 'KeyE':
+            document.querySelector('#edge-highlight-mode').click()
+            break
+        case 'KeyV':
+            document.querySelector('#vertex-highlight-mode').click()
             break
         default:
             break;

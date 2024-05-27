@@ -2,6 +2,7 @@ let VERTICES_POS = []
 let ALIASES = []
 let EDGE_MATRIX = []
 let EDGE_HIGHLIGHT = []
+let VERTEX_HIGHLIGHT = []
 let GRAPH_TYPE = 'undirected'
 
 function load_graph_data(data) {
@@ -9,6 +10,7 @@ function load_graph_data(data) {
     ALIASES = data.aliases
     EDGE_MATRIX = data.edge_matrix
     EDGE_HIGHLIGHT = data.edge_highlight
+    VERTEX_HIGHLIGHT = data.vertex_highlight
     GRAPH_TYPE = data.graph_type
 }
 
@@ -16,6 +18,7 @@ function save_graph_data(output) {
     output.VERTICES_POS = VERTICES_POS
     output.aliases = ALIASES
     output.edge_highlight = EDGE_HIGHLIGHT
+    output.vertex_highlight = VERTEX_HIGHLIGHT
     output.edge_matrix = EDGE_MATRIX
     output.graph_type = GRAPH_TYPE
 }
@@ -34,10 +37,11 @@ function add_vertex(x, y) {
     len = EDGE_MATRIX.length
     for (let i = 0; i < len; i++) {
         EDGE_MATRIX[i].push(0)
-        EDGE_HIGHLIGHT[i].push(0)
+        EDGE_HIGHLIGHT[i].push(null)
     }
     EDGE_MATRIX.push(new Array(len + 1).fill(0))
-    EDGE_HIGHLIGHT.push(new Array(len + 1).fill(0))
+    EDGE_HIGHLIGHT.push(new Array(len + 1).fill(null))
+    VERTEX_HIGHLIGHT.push(null)
 
     render()
 
@@ -64,20 +68,38 @@ function toggle_edge(v1, v2) {
 
 }
 
-function highlight_edge(v1, v2) {
+function highlight_edge(v1, v2, color) {
 
     if (!EDGE_MATRIX[v1][v2] && !EDGE_MATRIX[v2][v1]) {
         notify("cannot highlight non existing edge")
         return
     }
-    EDGE_HIGHLIGHT[v2][v1] = +!EDGE_HIGHLIGHT[v2][v1]
-    EDGE_HIGHLIGHT[v1][v2] = +!EDGE_HIGHLIGHT[v1][v2]
+
+    if (EDGE_HIGHLIGHT[v1][v2] == null) {
+        EDGE_HIGHLIGHT[v2][v1] = color
+        EDGE_HIGHLIGHT[v1][v2] = color
+    }
+    else {
+        EDGE_HIGHLIGHT[v2][v1] = null
+        EDGE_HIGHLIGHT[v1][v2] = null
+    }
+
+}
+
+function highlight_vertex(v, color) {
+    if (VERTEX_HIGHLIGHT[v] == color) {
+        VERTEX_HIGHLIGHT[v] = null
+        return
+    }
+    VERTEX_HIGHLIGHT[v] = color
 }
 
 function no_highlight() {
-    for (let i = 0; i < EDGE_HIGHLIGHT.length; i++)
+    for (let i = 0; i < EDGE_HIGHLIGHT.length; i++) {
+        VERTEX_HIGHLIGHT[i] = null
         for (let j = 0; j < EDGE_HIGHLIGHT.length; j++)
-            EDGE_HIGHLIGHT[i][j] = 0
+            EDGE_HIGHLIGHT[i][j] = null
+    }
     render()
 }
 

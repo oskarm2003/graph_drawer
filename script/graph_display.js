@@ -28,15 +28,18 @@ function init_canvas() {
     calc_orientation()
     CANVAS = document.querySelector('#board')
 
-    //horizontal
-    if (ORIENTATION == 'horizontal') {
-        CANVAS.height = CANVAS.offsetHeight
-        CANVAS.width = window.innerWidth - document.querySelector(".menu-wrapper").offsetWidth
-    }
-    else {
-        CANVAS.height = window.innerHeight - document.querySelector('.menu-wrapper').offsetHeight
-        CANVAS.width = CANVAS.offsetWidth
-    }
+    // //horizontal
+    // if (ORIENTATION == 'horizontal') {
+    //     CANVAS.height = CANVAS.offsetHeight
+    //     CANVAS.width = window.innerWidth - document.querySelector(".menu-wrapper").offsetWidth
+    // }
+    // else {
+    //     CANVAS.height = window.innerHeight
+    // CANVAS.width = CANVAS.offsetWidth
+    // }
+
+    CANVAS.height = CANVAS.offsetHeight
+    CANVAS.width = CANVAS.offsetWidth
 
     CTX = CANVAS.getContext('2d')
 
@@ -55,8 +58,7 @@ function translate_virtual_pos(x, y, output_multiplier = 1) {
 }
 
 function translate_screen_pos(x, y) {
-    let gap = 0
-    if (ORIENTATION == 'horizontal') gap = document.querySelector(".menu-wrapper").offsetWidth / ZOOM
+    gap = document.querySelector(".menu-wrapper").offsetWidth / ZOOM
     return [
         (x - CENTER[0]) / ZOOM - gap,
         (y - CENTER[1]) / ZOOM
@@ -106,8 +108,8 @@ function render() {
                 CTX.beginPath()
                 CTX.strokeStyle = '#000000'
                 CTX.lineWidth = 1
-                if (EDGE_HIGHLIGHT[c][r]) {
-                    CTX.strokeStyle = '#8fff7f'
+                if (EDGE_HIGHLIGHT[c][r] != null) {
+                    CTX.strokeStyle = EDGE_HIGHLIGHT[c][r]
                     CTX.lineWidth = 4
                 }
 
@@ -161,16 +163,26 @@ function render() {
         }
     }
 
-    //graph vertezies
+    //graph vertices
     for (let i = 0; i < VERTICES_POS.length; i++) {
         let vertex = VERTICES_POS[i]
         if (vertex == null) continue
         //translate pos to be relational to the center
         let [x, y] = translate_virtual_pos(vertex[0], vertex[1])
         CTX.beginPath()
-        CTX.arc(x, y, VERTEX_RADIUS * ZOOM, 0, 2 * Math.PI)
-        CTX.fillStyle = (SELECTED.includes(i)) ? '#9f3f3f' : '#000000'
+        CTX.arc(x, y,
+            (VERTEX_RADIUS + (VERTEX_HIGHLIGHT[i] != null)) * ZOOM, // makes vertex bigger it its is highlighted
+            0, 2 * Math.PI)
+
+        CTX.fillStyle = (
+            SELECTED.includes(i)) ? '#9f3f3f' :
+            (
+                VERTEX_HIGHLIGHT[i] === null ?
+                    '#000000' : VERTEX_HIGHLIGHT[i]
+            )
+
         CTX.fill()
+
         if (SETTINGS_ON.includes('show_alias')) {
             const alias = ALIASES[i] ? ALIASES[i] : i
             CTX.font = (20 * ZOOM) + "px Arial"

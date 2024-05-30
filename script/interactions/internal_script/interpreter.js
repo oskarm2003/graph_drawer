@@ -1,6 +1,5 @@
 function run_script() {
     const script = preProcess(script_input.value)
-    console.log(JSON.stringify(script))
     eval("(async function () {" + script + "})();")
 }
 

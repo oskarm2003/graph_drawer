@@ -25,8 +25,8 @@ document.querySelector('#convert_type').onclick = convert_graph_type
 document.querySelector('#blank_background').onclick = check
 
 //projects
-document.querySelector('#projects').onclick = manage_projects
-document.querySelector('#projects').oncontextmenu = open_menu
+// document.querySelector('#projects').onclick = manage_projects
+// document.querySelector('#projects').oncontextmenu = open_menu
 
 //naming
 document.querySelector('#show_alias').onclick = check

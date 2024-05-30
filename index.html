@@ -11,6 +11,7 @@
     <script defer src="script/graph_display.js"></script>
     <script defer src="script/interactions/interaction_controller.js"></script>
     <script defer src="script/interactions/projects_manager.js"></script>
+    <script defer src="script/interactions/internal_script/display_text.js"></script>
     <script defer src="script/interactions/internal_script/text_editor.js"></script>
     <script defer src="script/interactions/internal_script/interpreter.js"></script>
     <script defer src="script/interactions/ui_menu.js"></script>
@@ -158,7 +159,11 @@
                 <h2>custom scripts</h2>
                 <p>you can write a custom script that interacts with your graph</p>
 
-                <textarea spellcheck="false" name="internal-script" id="internal-script"></textarea>
+                <div id="script-textarea-wrapper">
+                    <canvas id="internal-script-display"></canvas>
+                    <textarea spellcheck="false" name="internal-script" id="internal-script"></textarea>
+                </div>
+                <p>grab bottom right corner to resize</p>
                 <button id="run-script">run</button>
 
                 <div class="gap"></div>

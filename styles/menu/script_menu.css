@@ -1,6 +1,7 @@
 .script-wrapper {
 
     min-width: 30rem;
+    /* max-width: 50rem; */
 
     display: none;
     flex-direction: column;
@@ -12,6 +13,7 @@
 .menu-wrapper>.script-wrapper>p,
 .script-doc {
     width: 100%;
+    max-width: 45rem;
     text-align: center;
     font-size: 1.75rem;
     color: #6f6f6f;
@@ -26,26 +28,65 @@
     width: 100%;
 }
 
-#internal-script {
+#script-textarea-wrapper {
 
+    position: relative;
     margin: 1rem 0;
     min-height: 20rem;
-    width: fit-content;
-    resize: none;
+    /* width: 90%;
+    height: 60rem; */
 
     border-radius: 5px;
-    padding: 1.5rem;
-    box-shadow: none;
     border: 1px solid #7f7f7f;
 
-    font-size: 2rem;
-    font-family: Lato;
     color: #2f2f2f;
+    background-color: white;
+    overflow: hidden;
+
+}
+
+#internal-script {
+
+    /* resize: none; */
+    max-width: 125rem;
+    min-width: 40rem;
+    min-height: 30rem;
+    border: none;
+    background-color: #ffffff00;
+
     text-wrap: nowrap;
+    font-size: 2rem;
+    font-family: monospace;
+
+    color: transparent;
+    caret-color: black;
+
 }
 
 #internal-script:focus {
-    outline: 2px solid #afafcf;
+    outline: none;
+}
+
+#internal-script::selection {
+    background-color: #5f5fff8f;
+}
+
+#internal-script-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    /* height: 100%; */
+    /* width: 100%; */
+    pointer-events: none;
+}
+
+#internal-script,
+#internal-script-display {
+    height: calc(100% - 2rem);
+    width: calc(100% - 2rem);
+    margin: 1rem;
+    padding: 0;
 }
 
 #internal-console {
@@ -62,6 +103,7 @@
 
     background-color: #efdfcf;
     color: black;
+    transition: all 300ms;
 }
 
 .script-doc {

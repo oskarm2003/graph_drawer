@@ -6,7 +6,7 @@ let VERTEX_HIGHLIGHT = []
 let GRAPH_TYPE = 'undirected'
 
 function load_graph_data(data) {
-    VERTICES_POS = data.VERTICES_POS
+    VERTICES_POS = data.vertices_pos
     ALIASES = data.aliases
     EDGE_MATRIX = data.edge_matrix
     EDGE_HIGHLIGHT = data.edge_highlight
@@ -15,7 +15,7 @@ function load_graph_data(data) {
 }
 
 function save_graph_data(output) {
-    output.VERTICES_POS = VERTICES_POS
+    output.vertices_pos = VERTICES_POS
     output.aliases = ALIASES
     output.edge_highlight = EDGE_HIGHLIGHT
     output.vertex_highlight = VERTEX_HIGHLIGHT

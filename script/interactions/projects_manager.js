@@ -1,62 +1,63 @@
 PROJECTS = document.querySelector("#projects")
 CONTEXT_MENU = document.querySelector("#context_menu")
 
-function manage_projects(e) {
+for (const tab of PROJECTS.children) {
+    tab.onclick = function () { select_project_tab(this) }
+    tab.oncontextmenu = function (e) { open_menu(this, e) }
+}
+
+function select_project_tab(selected) {
 
     let prev_selected = find_selected()
-    let curr_selected = map_project(e.clientX)
 
-    //change selection
-    if (prev_selected != curr_selected && curr_selected != -1) {
+    //if click on selected
+    if (selected == PROJECTS.children[prev_selected]) {
+        change_name(selected)
+        return
+    }
 
-        save_graph_data(GRAPHS[prev_selected])
-        this.children[prev_selected].setAttribute("selected", "0")
+    save_graph_data(GRAPHS[prev_selected])
+    PROJECTS.children[prev_selected].removeAttribute("selected")
 
-        //if adding new graph
-        if (curr_selected == this.children.length - 1) {
-            const tmp = this.children[curr_selected]
-            this.removeChild(this.lastChild)
-            const div = document.createElement("div")
-            this.append(div)
+    if (selected.getAttribute("id") == "add_new") {
 
-            // name new tab
-            change_name(div)
+        const new_tab = document.createElement("div")
+        new_tab.onclick = function () { select_project_tab(this) }
+        new_tab.oncontextmenu = function (e) { open_menu(this, e) }
+        PROJECTS.children[PROJECTS.children.length - 1].insertAdjacentElement("beforebegin", new_tab)
 
-            // create new graph object
-            this.append(tmp)
-            GRAPHS.push({
-                VERTICES_POS: [],
-                aliases: [],
-                edge_highlight: [],
-                edge_matrix: [],
-                graph_type: "directed"
-            })
-        }
+        change_name(new_tab)
+        GRAPHS.push({
+            vertices_pos: [],
+            aliases: [],
+            edge_highlight: [],
+            vertex_highlight: [],
+            edge_matrix: [],
+            graph_type: "directed"
+        })
 
-        this.children[curr_selected].setAttribute("selected", "1")
-        load_graph_data(GRAPHS[curr_selected])
-        rename_convert_button()
-        render()
+        selected = new_tab
 
     }
 
-    else {
-        if (curr_selected != this.children.length - 1) {
-            change_name(this.children[curr_selected])
-        }
-    }
+    selected.setAttribute("selected", "1")
+    load_graph_data(GRAPHS[find_selected()])
+    rename_convert_button()
+    render()
 
 }
 
 
-function open_menu(e) {
-    e.preventDefault()
-    CONTEXT_MENU.style.left = e.clientX + 'px'
-    CONTEXT_MENU.style.top = e.clientY + 'px'
+function open_menu(element, event) {
+
+    event.preventDefault()
+    CONTEXT_MENU.style.left = event.clientX + 'px'
+    CONTEXT_MENU.style.top = event.clientY + 'px'
     CONTEXT_MENU.style.display = 'flex'
+    // focus to assert focusout on beyond the element click
     CONTEXT_MENU.focus()
 
-    const element_index = map_project(e.clientX)
+    const element_index = map_project(element)
 
     //click on delete
     CONTEXT_MENU.children[0].onclick = () => {
@@ -66,12 +67,10 @@ function open_menu(e) {
             notify("at least one project has to exist")
         }
         else {
-            const selected = find_selected()
-
             delete_project(element_index)
 
             //if removed selected
-            if (selected == element_index) {
+            if (find_selected() == element_index) {
                 PROJECTS.children[0].setAttribute("selected", "1")
                 load_graph_data(GRAPHS[0])
                 rename_convert_button()
@@ -122,14 +121,12 @@ const change_name = (div) => {
     });
 }
 
-function map_project(x) {
-    x -= PROJECTS.offsetLeft
+function map_project(proj) {
     for (let i = 0; i < PROJECTS.children.length; i++) {
-        const child = PROJECTS.children[i]
-        if (child.offsetLeft < x && x < child.offsetLeft + child.offsetWidth) {
+        if (PROJECTS.children[i] === proj)
             return i
-        }
     }
+    return -1
 }
 
 function find_selected() {
@@ -140,9 +137,8 @@ function find_selected() {
 
 function delete_project(project_index) {
 
-    for (let i = project_index; i < GRAPHS.length - 1; i++) {
+    for (let i = project_index; i < GRAPHS.length - 1; i++)
         GRAPHS[i] = GRAPHS[i + 1]
-    }
 
     GRAPHS.pop()
     PROJECTS.children[project_index].remove()

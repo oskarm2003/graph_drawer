@@ -1,10 +1,16 @@
 const script_input = document.querySelector("#internal-script")
+const script_display_canvas = document.querySelector("#internal-script-display")
+const script_wrapper = document.querySelector("#script-textarea-wrapper")
 
 script_input.onfocus = () => {
     ACCEPT_HOTKEYS = false
 }
 script_input.onblur = () => {
     ACCEPT_HOTKEYS = true
+}
+
+script_input.onscroll = () => {
+    DISPLAY.displayText(script_input.value)
 }
 
 const placeCursor = (pos) => {
@@ -19,6 +25,7 @@ const insertChar = (pos, char) => {
 
 script_input.onkeydown = (e) => {
 
+    // alterSize()
     cursor_pos = script_input.selectionStart
 
     if (e.key == "Tab") {
@@ -57,31 +64,47 @@ script_input.onkeydown = (e) => {
             e.preventDefault()
             insertChar(cursor_pos, "\n\t\n")
             placeCursor(cursor_pos + 2)
+            DISPLAY.displayText(script_input.value)
         }
     }
 
-    autoResize()
-
 }
 
-function autoResize() {
-    let base_font_size = window.getComputedStyle(document.body).getPropertyValue("font-size")
-    base_font_size = parseInt(base_font_size.slice(0, base_font_size.length - 2));
-
-    script_input.style.height = Math.min(
-        Math.max(
-            20 * base_font_size,
-            script_input.scrollHeight
-        ),
-        80 * base_font_size) + "px"
-
-    script_input.style.width = Math.min(
-        Math.max(
-            30 * base_font_size,
-            script_input.scrollWidth
-        ),
-        70 * base_font_size) + "px"
+script_input.oninput = () => {
+    DISPLAY.displayText(script_input.value)
 }
 
-script_input.textContent = "// example code - BFS\n\nconst G = getGraph(\"adjacency list\")\nconst visited = new Array(G.length).fill(false)\nconst queue = []\nqueue.push(0)\n\n// only for better algorithm visualization\nlet curr_queue = []\nlet depth = 0\n\nwhile (queue.length != 0 || curr_queue.length != 0) {\n\t\n\tif (curr_queue.length == 0) {\n\t\tcurr_queue = [...queue]\n\t\tqueue.length = 0\n\t\tprint(++depth)\n\t\tawait sleep(500)\n\t}\n\n\tconst v = curr_queue.shift()\n    \n   \tif (visited[v])\n\t\tcontinue\n    \n    \tvisited[v] = true\n\thighlightVertex(v,\"#3f8fff\")\n\t\n\tfor (const u of G[v]) {\n\t\tif (!visited[u])\n\t\t\tqueue.push(u)\n\t}\n\nprint(\"graph's depth is \" + depth)}"
-autoResize()
+let timeout = setTimeout(() => { })
+const observer = new ResizeObserver(() => {
+
+    clearTimeout(timeout)
+    script_wrapper.style.backgroundColor = "#afafcf6f"
+
+    timeout = setTimeout(() => {
+        script_wrapper.style.backgroundColor = "white"
+        DISPLAY.displayText(script_input.value)
+    }, 50)
+})
+observer.observe(script_input)
+
+// const max_width = Math.floor(
+//     document.querySelector(".script-wrapper").getBoundingClientRect().width * 0.8
+// )
+// const max_height = script_input.getBoundingClientRect().height * 3
+
+// function alterSize() {
+
+
+//     const { width, height } = script_input.getBoundingClientRect()
+//     console.log(max_width, width);
+//     if (width < max_width) {
+//         script_input.style.width = script_input.scrollWidth + "px"
+//         DISPLAY.displayText(script_input.value)
+//     }
+
+// }
+
+script_input.value = "// example code - BFS\n\nconst G = getGraph(\"adjacency list\")\nconst visited = new Array(G.length).fill(false)\nconst queue = []\nqueue.push(0)\n\n// only for better algorithm visualization\nlet curr_queue = []\nlet depth = 0\n\nwhile (queue.length != 0 || curr_queue.length != 0) {\n\t\n\tif (curr_queue.length == 0) {\n\t\tcurr_queue = [...queue]\n\t\tqueue.length = 0\n\t\tprint(++depth)\n\t\tawait sleep(500)\n\t}\n\n\tconst v = curr_queue.shift()\n    \n   \tif (visited[v])\n\t\tcontinue\n    \n    \tvisited[v] = true\n\thighlightVertex(v,\"#3f8fff\")\n\t\n\tfor (const u of G[v]) {\n\t\tif (!visited[u])\n\t\t\tqueue.push(u)\n\t}\n}\n\nprint(\"furthest distance from vertex 0 is \" + (depth-1))"
+
+const DISPLAY = new ScriptDisplay()
+DISPLAY.displayText(script_input.value)

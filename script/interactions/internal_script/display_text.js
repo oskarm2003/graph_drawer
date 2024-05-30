@@ -9,8 +9,8 @@ class ScriptDisplay {
             this.canvas.height = this.textarea.clientHeight
             this.canvas.width = this.textarea.clientWidth
 
-            const font_size = window.getComputedStyle(this.textarea).fontSize
-            this.ctx.font = `${font_size} monospace`
+            const { fontFamily, fontSize } = window.getComputedStyle(this.textarea)
+            this.ctx.font = `${fontSize} ${fontFamily}`
             this.ctx.textAlign = "left"
             this.ctx.textBaseline = "top"
 
@@ -43,6 +43,7 @@ class ScriptDisplay {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.determineTabSize()
 
+        // gap is used to adjust text top position to match the text in textarea
         const gap = 2
         this.vertical_margin = this.textarea.scrollTop * -1 + gap
 
@@ -84,7 +85,7 @@ class ScriptDisplay {
     }
 
     determineColor(string) {
-        const control = ["await", "function", "for", "while", "break", "continue", "return", "if", "else"]
+        const control = ["new", "await", "function", "for", "while", "break", "continue", "return", "if", "else"]
         if (control.includes(string))
             return "#66388a"
 

@@ -32,6 +32,7 @@ script_input.onkeydown = (e) => {
         e.preventDefault()
         insertChar(cursor_pos, '\t')
         placeCursor(cursor_pos + 1)
+        DISPLAY.displayText(script_input.value)
     }
 
     if (e.key == "(") {

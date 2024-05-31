@@ -144,3 +144,29 @@ function delete_project(project_index) {
     PROJECTS.children[project_index].remove()
 
 }
+
+
+const visibility_option = document.querySelector("#visibility")
+visibility_option.onclick = () => {
+
+    const option = visibility_option.getAttribute("visible")
+    const menu = document.querySelector(".menu-wrapper")
+    const show_icon = (num) => {
+        for (const icon of visibility_option.children)
+            icon.style.display = "none"
+        visibility_option.children[num].style.display = "block"
+    }
+    console.log(option);
+
+    if (option == "true") {
+        visibility_option.setAttribute("visible", false)
+        menu.style.display = "none"
+        show_icon(1)
+    }
+    else {
+        visibility_option.setAttribute("visible", true)
+        menu.style.display = "block"
+        show_icon(0)
+    }
+
+}

@@ -6,19 +6,35 @@ class ScriptDisplay {
         this.ctx = this.canvas.getContext("2d")
 
         const observer = new ResizeObserver(() => {
-            this.canvas.height = this.textarea.clientHeight
-            this.canvas.width = this.textarea.clientWidth
 
-            const { fontFamily, fontSize } = window.getComputedStyle(this.textarea)
-            this.ctx.font = `${fontSize} ${fontFamily}`
-            this.ctx.textAlign = "left"
-            this.ctx.textBaseline = "top"
+            // this.canvas.width = this.textarea.clientWidth
+            // this.canvas.height = this.textarea.clientHeight
 
-            const metrics = this.ctx.measureText("hello world;")
-            this.line_height = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent
+            const scale = 1.75
+            this.canvas.width = this.textarea.clientWidth * scale
+            this.canvas.height = this.textarea.clientHeight * scale
+            this.ctx.scale(scale, scale)
+
+            this.onFontUpdate()
+
         })
 
         observer.observe(this.canvas)
+
+    }
+
+    onFontUpdate() {
+
+        const { fontFamily, fontSize } = window.getComputedStyle(this.textarea)
+        this.ctx.font = `${fontSize} ${fontFamily}`
+        this.ctx.textAlign = "left"
+        this.ctx.textBaseline = "top"
+
+        const metrics = this.ctx.measureText("hello world;")
+        this.line_height = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+
+        this.determineTabSize()
+        this.calcLineGap()
 
     }
 
@@ -27,7 +43,7 @@ class ScriptDisplay {
         const pre = document.createElement("pre")
         pre.style.fontFamily = this.ctx.font.split(" ")[1]
         pre.style.fontSize = this.ctx.font.split(" ")[0]
-        pre.style.color = "#ffffff"
+        pre.style.visibility = "hidden"
         pre.style.position = "absolute"
 
         document.body.append(pre)
@@ -38,10 +54,28 @@ class ScriptDisplay {
 
     }
 
+    calcLineGap() {
+
+        const sample_text = "wqllM"
+
+        const pre = document.createElement("pre")
+        pre.style.fontFamily = this.ctx.font.split(" ")[1]
+        pre.style.fontSize = this.ctx.font.split(" ")[0]
+        pre.style.visibility = "hidden"
+        pre.style.position = "absolute"
+
+        document.body.append(pre)
+        pre.textContent = sample_text
+        const dom_size = pre.getBoundingClientRect().height
+
+        this.line_gap = Math.max(0, dom_size - this.line_height)
+
+    }
+
+
     displayText(text) {
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-        this.determineTabSize()
 
         // gap is used to adjust text top position to match the text in textarea
         const gap = 2
@@ -49,13 +83,13 @@ class ScriptDisplay {
 
         for (const line of text.split("\n")) {
             this.processLine(line)
-            this.vertical_margin += this.line_height
+            this.vertical_margin += this.line_height + this.line_gap
         }
     }
 
     processLine(line) {
 
-        const words = line.split(/(".*"|'.*'|`.*`|\/\/|[{}\[\]() \t])/)
+        const words = line.split(/(".*"|'.*'|`.*`|\/\/|[{}\[\]() \t.,+-;=><!])/)
         let within_comment = false
 
         this.horizontal_margin = this.textarea.scrollLeft * -1
@@ -85,20 +119,48 @@ class ScriptDisplay {
     }
 
     determineColor(string) {
-        const control = ["new", "await", "function", "for", "while", "break", "continue", "return", "if", "else"]
-        if (control.includes(string))
-            return "#66388a"
 
-        const keywords = ["let", "var", "const", "of", "in"]
-        if (keywords.includes(string))
-            return "#3399c4"
+        const colors = {
+            "string": "#3cba44",
+            "number": "#f09b0a",
+            "keywords": "#3d4f91",
+            "controls": "#c734c0",
+            "variables": "#859fff",
+            "special_functions": "#769484"
+        }
+
+        // is string
+        if (string[0] == "\"" || string[0] == "'" || string[0] == "`")
+            return colors.string
+
+
+        // is number
+        if (string.match(/^[0-9]+$/))
+            return colors.number
+
 
         const brackets = ["{", "}", "(", ")", "[", "]"]
         if (brackets.includes(string[0]) || brackets.includes(string[string.length - 1]))
-            return "#eb6b34"
+            return colors.controls
 
-        if (string[0] == "\"" || string[0] == "'" || string[0] == "`")
-            return "#45a159"
+
+        const keywords = ["let", "var", "const", "of", "in", "true", "false"]
+        if (keywords.includes(string))
+            return colors.keywords
+
+
+        const functions = ["getGraph", "print", "sleep", "highlightVertex", "highlightEdge", "clear"]
+        if (functions.includes(string))
+            return colors.special_functions
+
+
+        const control = ["new", "async", "await", "function", "for", "while", "break", "continue", "return", "if", "else"]
+        if (control.includes(string))
+            return colors.controls
+
+
+        if (string.match(/^[a-zA-z_]+$/))
+            return colors.variables
 
 
         return "#1f1f1f"

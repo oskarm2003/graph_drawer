@@ -82,6 +82,7 @@ div#saver {
     transform: translate(-110%, -125%);
     color: white;
     background-color: #0f0f0fdf;
+    font-family: Lato;
 }
 
 #zoom:hover {

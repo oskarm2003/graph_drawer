@@ -41,8 +41,8 @@ document.querySelector('#clear_highlight').onclick = no_highlight
 
 // internal script
 document.querySelector('#go-to-script').onclick = () => {
-    document.querySelector("#script-tab").click()
 }
+document.querySelector("#script-tab").click()
 document.querySelector('#run-script').onclick = run_script
 document.querySelector('#clear-console').onclick = clear
 

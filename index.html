@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="styles/menu/settings_menu.css">
     <link rel="stylesheet" href="styles/menu/help.css">
     <link rel="stylesheet" href="styles/popups.css">
-    <link rel="stylesheet" href="styles/projects_select.css">
+    <link rel="stylesheet" href="styles/projects_and_visibility.css">
     <link rel="stylesheet" href="styles/fonts.css">
     <title>Graph Maker</title>
 </head>
@@ -159,6 +159,25 @@
                 <h2>custom scripts</h2>
                 <p>you can write a custom script that interacts with your graph</p>
 
+                <div class="font-manager">
+                    <p>font</p>
+                    <select name="font-select" id="font-select">
+                        <option default value="monospace">monospace</option>
+                        <option value="cursive">cursive</option>
+                        <option value="Arial">Arial</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Tahoma">Tahoma</option>
+                        <option value="Trebuchet MS">Trebuchet MS</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Courier New">Courier New</option>
+                    </select>
+
+                    <input type="number" value="20" name="font-size" id="font-size">
+
+                </div>
+
+
                 <div id="script-textarea-wrapper">
                     <canvas id="internal-script-display"></canvas>
                     <textarea spellcheck="false" name="internal-script" id="internal-script"></textarea>
@@ -174,7 +193,7 @@
                 <hr>
                 <h2>manual</h2>
                 <div class="script-doc">
-                    <p>In the manual below "console" refers to the element on the page below the text editor. <br />
+                    <p>In the text below "console" refers to the element on the page below the text editor. <br />
                         The script has to be written in JavaScript.
                         You can use dedicated functions that allow you to interact with the created graph, such as:
                         <br />
@@ -271,10 +290,19 @@
 
         </div>
 
-        <!-- created projects -->
-        <div id="projects">
-            <div selected="1">undirected graph 1</div>
-            <div id="add_new"><b>+</b></div>
+        <div class="projects-and-visibility-wrapper">
+
+            <!-- created projects -->
+            <div id="projects">
+                <div selected="1">undirected graph 1</div>
+                <div id="add_new"><b>+</b></div>
+            </div>
+
+            <div id="visibility" visible="true">
+                <img src="" alt="opened eye">
+                <img src="" alt="closed eye" style="display:none">
+            </div>
+
         </div>
 
     </div>

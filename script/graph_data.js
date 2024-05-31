@@ -2,8 +2,10 @@ let VERTICES_POS = []
 let ALIASES = []
 let EDGE_MATRIX = []
 let EDGE_HIGHLIGHT = []
+let EDGE_WEIGHTS = []
 let VERTEX_HIGHLIGHT = []
 let GRAPH_TYPE = 'undirected'
+let WEIGHTED = false
 
 function load_graph_data(data) {
     VERTICES_POS = data.vertices_pos
@@ -12,6 +14,7 @@ function load_graph_data(data) {
     EDGE_HIGHLIGHT = data.edge_highlight
     VERTEX_HIGHLIGHT = data.vertex_highlight
     GRAPH_TYPE = data.graph_type
+    WEIGHTED = data.is_weighted
 }
 
 function save_graph_data(output) {
@@ -21,6 +24,7 @@ function save_graph_data(output) {
     output.vertex_highlight = VERTEX_HIGHLIGHT
     output.edge_matrix = EDGE_MATRIX
     output.graph_type = GRAPH_TYPE
+    output.is_weighted = WEIGHTED
 }
 
 function add_vertex(x, y) {
@@ -37,10 +41,14 @@ function add_vertex(x, y) {
     len = EDGE_MATRIX.length
     for (let i = 0; i < len; i++) {
         EDGE_MATRIX[i].push(0)
+        EDGE_WEIGHTS[i].push(0)
         EDGE_HIGHLIGHT[i].push(null)
     }
+
     EDGE_MATRIX.push(new Array(len + 1).fill(0))
+    EDGE_WEIGHTS.push(new Array(len + 1).fill(0))
     EDGE_HIGHLIGHT.push(new Array(len + 1).fill(null))
+
     VERTEX_HIGHLIGHT.push(null)
 
     render()
@@ -146,6 +154,21 @@ function generate_data(type) {
 
     return "code will appear here..."
 
+}
+
+function convert_weighted() {
+
+    WEIGHTED = !WEIGHTED
+    render()
+
+    if (WEIGHTED) {
+        notify("converted to weighted")
+        document.querySelector("#convert_weighted").textContent = "convert to unweighted"
+    }
+    else {
+        notify("converted to unweighted")
+        document.querySelector("#convert_weighted").textContent = "convert to weighted"
+    }
 }
 
 function convert_graph_type() {

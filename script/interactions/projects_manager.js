@@ -16,8 +16,11 @@ function select_project_tab(selected) {
         return
     }
 
-    save_graph_data(GRAPHS[prev_selected])
-    PROJECTS.children[prev_selected].removeAttribute("selected")
+    if (GRAPHS[prev_selected]) {
+        save_graph_data(GRAPHS[prev_selected])
+        PROJECTS.children[prev_selected].removeAttribute("selected")
+    }
+
 
     if (selected.getAttribute("id") == "add_new") {
 
@@ -142,6 +145,7 @@ function delete_project(project_index) {
 
     GRAPHS.pop()
     PROJECTS.children[project_index].remove()
+    PROJECTS.children[0].click()
 
 }
 

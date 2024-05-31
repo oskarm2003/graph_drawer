@@ -78,6 +78,16 @@ div.range>div {
     position: absolute;
 }
 
+input[type="number"] {
+    width: 7rem;
+    font-size: 1.75rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #6f6f6f;
+}
+
 #size-prompt {
     /* fixed to ensure static width independendly on the content */
     width: 2rem;

@@ -19,7 +19,7 @@ function unselect_all_tabs() {
 
 function select(tab) {
     switch (tab.innerText) {
-        case "menu":
+        case "tools":
             show(document.querySelector(".buttons"))
             break;
 

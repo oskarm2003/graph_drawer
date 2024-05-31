@@ -20,6 +20,7 @@ document.querySelector('#keep_selected').onclick = check
 //graph data
 document.querySelector('#save_graph').onclick = open_saver
 document.querySelector('#convert_type').onclick = convert_graph_type
+document.querySelector('#convert_weighted').onclick = convert_weighted
 
 //display
 document.querySelector('#blank_background').onclick = check
@@ -39,10 +40,14 @@ document.querySelector('#vertex-highlight-mode').onclick = check
 document.querySelector('#highlight-vertices').onclick = highlight_selected_vertices
 document.querySelector('#clear_highlight').onclick = no_highlight
 
+
+//weights
+document.querySelector('#weight-on-click').onclick = check
+
 // internal script
 document.querySelector('#go-to-script').onclick = () => {
+    document.querySelector("#script-tab").click()
 }
-document.querySelector("#script-tab").click()
 document.querySelector('#run-script').onclick = run_script
 document.querySelector('#clear-console').onclick = clear
 
@@ -108,6 +113,9 @@ document.onkeydown = (e) => {
             break
         case 'KeyV':
             document.querySelector('#vertex-highlight-mode').click()
+            break
+        case 'KeyW':
+            document.querySelector('#weight-on-click').click()
             break
         default:
             break;

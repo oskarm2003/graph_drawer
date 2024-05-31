@@ -121,12 +121,12 @@ class ScriptDisplay {
     determineColor(string) {
 
         const colors = {
-            "string": "#3cba44",
+            "string": "#e6505d",
             "number": "#f09b0a",
             "keywords": "#3d4f91",
             "controls": "#c734c0",
             "variables": "#859fff",
-            "special_functions": "#769484"
+            "special_functions": "#2e5e43"
         }
 
         // is string

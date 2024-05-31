@@ -66,8 +66,8 @@ function translate_screen_pos(x, y) {
     ]
 }
 
-//returns the index of the edge that has been clicked
-function map_edge(x, y) {
+//returns the index of the vertex that has been clicked
+function map_vertex(x, y) {
     [x, y] = translate_screen_pos(x, y)
     for (let i = 0; i < VERTICES_POS.length; i++) {
         vertex = VERTICES_POS[i]
@@ -79,8 +79,57 @@ function map_edge(x, y) {
 
     }
     return null
-
 }
+
+
+function detect_edge(x, y) {
+
+    [x, y] = translate_screen_pos(x, y)
+    const detection_accuracy = 0.15
+
+    for (let c = 0; c < EDGE_MATRIX.length; c++) {
+        for (let r = 0; r < EDGE_MATRIX.length; r++) {
+
+            //edge found
+            if (EDGE_MATRIX[r][c] != 0) {
+
+                const a = VERTICES_POS[r]
+                const b = VERTICES_POS[c]
+
+                // be more forgiving when accepted area decreases
+                const horizontal_forgiveness = detection_accuracy + Math.max(0, 20 - Math.abs(a[0] - b[0]) ** 2)
+                const vertical_forgiveness = detection_accuracy + Math.max(0, 20 - Math.abs(a[1] - b[1]) ** 2)
+
+                // check if clicked between vertices
+                if (Math.min(a[0], b[0]) - x > horizontal_forgiveness || Math.max(a[0], b[0]) - x < -horizontal_forgiveness)
+                    continue
+
+                if (Math.min(a[1], b[1]) - y > vertical_forgiveness || Math.max(a[1], b[1]) - y < -vertical_forgiveness)
+                    continue
+
+                // check if versors match
+                const ab = [b[0] - a[0], b[1] - a[1]]
+                const ab_len = Math.sqrt(Math.abs(ab[0] * ab[1] || Math.max(ab[0], ab[1]))) // eliminate 0 len
+                const ab_versor = [ab[0] / ab_len, ab[1] / ab_len]
+
+                const ap = [x - a[0], y - a[1]]
+                const ap_len = Math.sqrt(Math.abs(ap[0] * ap[1] || Math.max(ap[0], ap[1])))  // eliminate 0 len
+                const ap_versor = [ap[0] / ap_len, ap[1] / ap_len]
+
+                // forgivenesses are flipped because as one dimension gets smaller the changes on other dimension get less significant when calculating vector's length
+                // example: w1: 0.001 h2: 1000 l1: w1*h1=1
+                // w2: 0.01 h2: 100 l2: 1  (change on height is much greater than on width)
+                if (
+                    Math.abs(ap_versor[0] - ab_versor[0]) < vertical_forgiveness &&
+                    Math.abs(ap_versor[1] - ab_versor[1]) < horizontal_forgiveness
+                ) {
+                    return [r, c]
+                }
+            }
+        }
+    }
+}
+
 
 function render() {
 
@@ -125,7 +174,7 @@ function render() {
                 if (EDGE_MATRIX[c][r] != EDGE_MATRIX[r][c]) {
                     const density = Math.max(
                         Math.floor(Math.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2) / 100)
-                        , 2
+                        , (WEIGHTED ? 3 : 2)
                     ) / ZOOM
                     const x = (b[0] - a[0]) / density
                     const y = (b[1] - a[1]) / density
@@ -160,6 +209,18 @@ function render() {
                     }
                 }
 
+                // weights of the edges
+                if (WEIGHTED) {
+                    const vector = [Math.floor((b[0] - a[0]) / 2), Math.floor((b[1] - a[1]) / 2)]
+                    CTX.font = (25 * ZOOM) + "px Arial"
+
+                    CTX.fillStyle = "#ffffff"
+                    CTX.fillRect(a[0] + vector[0] - 10 * ZOOM, a[1] + vector[1] - 10 * ZOOM, CTX.measureText(EDGE_WEIGHTS[c][r]).width, 20 * ZOOM)
+
+                    CTX.fillStyle = "#c22937"
+                    CTX.fillText(EDGE_WEIGHTS[c][r], a[0] + vector[0] - 10 * ZOOM, a[1] + vector[1] + 10 * ZOOM)
+                }
+
             }
         }
     }
@@ -190,4 +251,5 @@ function render() {
             CTX.fillText(alias, x, y - 20)
         }
     }
+
 }

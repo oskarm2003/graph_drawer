@@ -59,10 +59,11 @@ div#saver {
 }
 
 #notification {
-    display: none;
+    display: block;
     border: 0;
     background-color: #0f0f0fdf;
     font-size: 2rem;
+    font-family: Lato;
     padding: 1rem;
     color: white;
     top: 120%;

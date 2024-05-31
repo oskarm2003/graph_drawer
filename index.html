@@ -35,8 +35,8 @@
             <h1>Grapher</h1>
 
             <div class="menu-tabs">
-                <div selected="true" id="menu-tab">
-                    <p>menu</p>
+                <div selected="true" id="tools-tab">
+                    <p>tools</p>
                 </div>
                 <div id="script-tab">
                     <p>script</p>
@@ -51,6 +51,7 @@
                 <!-- configure graph -->
                 <h2>configure graph</h2>
                 <button id="convert_type">convert to directed</button>
+                <button id="convert_weighted">convert to weighted</button>
                 <button id="save_graph">export</button>
                 <p>you can save your graph in text format</p>
                 <hr>
@@ -105,6 +106,21 @@
 
                 <button id="clear_highlight">clear highlight</button>
 
+                <hr>
+
+                <h2>weights</h2>
+
+                <div class="checkbox-wrapper">
+                    <p>weight to add</p>
+                    <input type="number" value="3" name="weight" id="weight">
+                </div>
+                <div class="checkbox-wrapper">
+                    <p>add weight on click (w)</p>
+                    <div id="weight-on-click" class="checkbox" checked="false">
+                        <canvas id="checkbox_canvas"></canvas>
+                    </div>
+                </div>
+                <p>when an edge is clicked the selected weight is added to it</p>
                 <hr>
 
                 <!-- naming -->
@@ -299,8 +315,9 @@
             </div>
 
             <div id="visibility" visible="true">
-                <img src="" alt="opened eye">
-                <img src="" alt="closed eye" style="display:none">
+                <img src="./assets/icons/eye_opened_alt2.svg" class="white-filter" alt="opened eye">
+                <img src="./assets/icons/eye_closed_alt2.svg" alt="closed eye" class="white-filter"
+                    style="display:none">
             </div>
 
         </div>

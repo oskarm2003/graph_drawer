@@ -14,7 +14,7 @@ function on_down(e) {
     IS_DOWN = true
 
     const [x, y] = [e.clientX + CANVAS.offsetLeft, e.clientY - CANVAS.offsetTop]
-    const detected = map_edge(x, y)
+    const detected = map_vertex(x, y)
     MOUSE_DOWN_POS = [e.clientX, e.clientY]
 
     if (detected === null && !IS_CTRL_DOWN) {
@@ -33,6 +33,19 @@ function on_down(e) {
             highlight_vertex(detected, color)
         }
         SELECTED.push(detected)
+    }
+
+    if (WEIGHTED && SETTINGS_ON.includes("weight-on-click")) {
+        const detected_edge = detect_edge(x, y)
+        if (detected_edge != undefined) {
+            const [x, y] = detected_edge
+            const weight = parseInt(document.querySelector("#weight").value)
+            if (weight != NaN) {
+                EDGE_WEIGHTS[x][y] += weight
+                if (GRAPH_TYPE === "undirected")
+                    EDGE_WEIGHTS[y][x] = EDGE_WEIGHTS[x][y]
+            }
+        }
     }
 
     render()
@@ -312,20 +325,39 @@ function open_saver() {
     }
 }
 
+const notification_queue = []
+let is_displaying = false
 function notify(message) {
-    notification = document.querySelector("#notification")
-    notification.innerText = message
-    notification.style.display = 'block'
-    setTimeout(() => {
-        notification.style.top = '92%'
-    }, 1)
-    setTimeout(() => {
-        notification.style.top = '120%'
-        setTimeout(() => {
-            notification.style.display = 'none'
-        }, 500)
-    }, 3000)
+
+    if (!is_displaying)
+        display_notification(message)
+    else
+        notification_queue.push(message)
+
 }
+
+function display_notification(text) {
+    is_displaying = true
+    notification = document.querySelector("#notification")
+    notification.innerText = text
+    notification.style.top = '92%'
+
+    setTimeout(() => {
+
+        notification.style.top = '120%'
+
+        setTimeout(() => {
+
+            is_displaying = false
+
+            if (notification_queue.length != 0)
+                display_notification(notification_queue.shift())
+
+        }, 100)
+
+    }, 2000)
+}
+
 
 function rename_convert_button() {
     if (GRAPH_TYPE == 'directed') {

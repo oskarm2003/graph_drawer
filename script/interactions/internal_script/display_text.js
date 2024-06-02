@@ -69,6 +69,7 @@ class ScriptDisplay {
         const dom_size = pre.getBoundingClientRect().height
 
         this.line_gap = Math.max(0, dom_size - this.line_height)
+        pre.remove()
 
     }
 

@@ -96,6 +96,7 @@ div#saver {
     width: 8rem;
     aspect-ratio: 1;
     pointer-events: none;
+    user-select: none;
     transform: translate(-1rem, -1rem);
     display: none;
 }

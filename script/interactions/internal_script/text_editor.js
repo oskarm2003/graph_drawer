@@ -121,7 +121,7 @@ document.querySelector("#font-size").onchange = function () {
     DISPLAY.displayText(script_input.value)
 }
 
-script_input.value = "// example code - BFS\n\nconst G = getGraph(\"adjacency list\")\nconst visited = new Array(G.length).fill(false)\nconst queue = []\nqueue.push(0)\n\n// second queue for better algo visualization\nlet curr_queue = []\nlet depth = 0\n\nwhile (queue.length != 0 || curr_queue.length != 0) {\n\t\n\tif (curr_queue.length == 0) {\n\t\tcurr_queue = [...queue]\n\t\tqueue.length = 0\n\t\tprint(++depth)\n\t\tawait sleep(500)\n\t}\n\n\tconst v = curr_queue.shift()\n    \n   \tif (visited[v])\n\t\tcontinue\n    \n    \tvisited[v] = true\n\thighlightVertex(v,\"#3f8fff\")\n\t\n\tfor (const u of G[v]) {\n\t\tif (!visited[u])\n\t\t\tqueue.push(u)\n\t}\n}\n\nprint(`furthest vertex from 0 is ${depth-1} steps away`)"
+script_input.value = "// example code - BFS\n// works on unweighted graphs\n\nconst G = getGraph(\"adjacency list\")\nconst visited = new Array(G.length).fill(false)\nconst queue = []\nqueue.push(0)\n\n// second queue for better algo visualization\nlet curr_queue = []\nlet depth = 0\n\nwhile (queue.length != 0 || curr_queue.length != 0) {\n\t\n\tif (curr_queue.length == 0) {\n\t\tcurr_queue = [...queue]\n\t\tqueue.length = 0\n\t\tprint(++depth)\n\t\tawait sleep(500)\n\t}\n\n\tconst v = curr_queue.shift()\n    \n   \tif (visited[v])\n\t\tcontinue\n    \n    \tvisited[v] = true\n\thighlightVertex(v,\"#3f8fff\")\n\t\n\tfor (const u of G[v]) {\n\t\tif (!visited[u])\n\t\t\tqueue.push(u)\n\t}\n}\n\nprint(`furthest vertex from 0 is ${depth-1} steps away`)"
 
 const DISPLAY = new ScriptDisplay()
 DISPLAY.displayText(script_input.value)

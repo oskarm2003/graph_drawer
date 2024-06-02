@@ -12,7 +12,7 @@ Running code internally means you can interact with the vertices and edges direc
 example of directed, weighted graph:
 ![directed, weighted graph](./assets/showcase/weighted%20directed%20graph.png)  
 
-petersen's graph created with Grapher:
+Petersen's graph created with Grapher:
 ![petersen's graph](./assets/showcase/petersen's%20graph.png)
 
 BFS run on a tree:

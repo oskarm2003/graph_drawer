@@ -90,3 +90,17 @@ div#saver {
     background-color: #2a2a2adf;
     cursor: pointer;
 }
+
+#weight-icon {
+    position: absolute;
+    width: 8rem;
+    aspect-ratio: 1;
+    pointer-events: none;
+    transform: translate(-1rem, -1rem);
+    display: none;
+}
+
+#weight-icon>img {
+    width: 100%;
+    height: 100%;
+}

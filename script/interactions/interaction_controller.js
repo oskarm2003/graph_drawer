@@ -7,6 +7,8 @@ let IS_SHIFT_DOWN = false
 let IS_CTRL_DOWN = false
 let SETTINGS_ON = []
 
+const weight_icon = document.querySelector("#weight-icon")
+
 function on_down(e) {
 
     document.querySelector('#alias_input').style.display = 'none'
@@ -49,10 +51,19 @@ function on_down(e) {
     render()
 }
 
+
 function on_move(e) {
+
+    // if add on weight
+    if (SETTINGS_ON.includes("weight-on-click")) {
+        weight_icon.style.display = 'block'
+        weight_icon.style.left = e.clientX + "px"
+        weight_icon.style.top = e.clientY + "px"
+    }
 
     if (!IS_DOWN) return
     MOVED = true
+
 
     //move the view
     if (IS_CTRL_DOWN) {
@@ -148,6 +159,8 @@ function mouse_out() {
     IS_DOWN = false
     MOUSE_DOWN_POS = null
     selection.style.display = 'none'
+    weight_icon.style.display = 'none'
+
 }
 
 
@@ -211,6 +224,12 @@ function toggle_setting(setting) {
         SETTINGS_ON.push(setting)
     }
 
+}
+
+function toggle_weight_icon_visibility() {
+    if (!SETTINGS_ON.includes("weight-on-click")) {
+        weight_icon.style.display = "none"
+    }
 }
 
 

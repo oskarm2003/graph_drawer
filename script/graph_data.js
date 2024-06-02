@@ -75,20 +75,27 @@ function add_vertex(x, y) {
 function remove_vertex(vertex) {
     if (vertex == null) return
 
-    const memo = [JSON.parse(JSON.stringify(EDGE_MATRIX)), VERTICES_POS[vertex], ALIASES[vertex]]
+    const memo = [JSON.parse(JSON.stringify(EDGE_MATRIX)), JSON.parse(JSON.stringify(EDGE_HIGHLIGHT)), JSON.parse(JSON.stringify(EDGE_WEIGHTS)), VERTICES_POS[vertex], ALIASES[vertex]]
 
     for (let i = 0; i < EDGE_MATRIX.length; i++) {
         EDGE_MATRIX[i].splice(vertex, 1)
+        EDGE_HIGHLIGHT[i].splice(vertex, 1)
+        EDGE_WEIGHTS[i].splice(vertex, 1)
     }
     EDGE_MATRIX.splice(vertex, 1)
+    EDGE_WEIGHTS.splice(vertex, 1)
+    EDGE_HIGHLIGHT.splice(vertex, 1)
+
     VERTICES_POS.splice(vertex, 1)
     ALIASES.splice(vertex, 1)
 
     // adding to UNDO_STACK
     action_controller.add_to_undo(() => {
         EDGE_MATRIX = memo[0]
-        VERTICES_POS.insert(vertex, memo[1])
-        ALIASES.insert(vertex, memo[2])
+        EDGE_HIGHLIGHT = memo[1]
+        EDGE_WEIGHTS = memo[2]
+        VERTICES_POS.insert(vertex, memo[3])
+        ALIASES.insert(vertex, memo[4])
     })
 
 }

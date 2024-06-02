@@ -50,7 +50,10 @@ document.querySelector('#clear_highlight').onclick = no_highlight
 document.querySelector('#undo').onclick = () => action_controller.undo()
 
 //weights
-document.querySelector('#weight-on-click').onclick = check
+document.querySelector('#weight-on-click').onclick = function () {
+    check.bind(this)()
+    toggle_weight_icon_visibility()
+}
 
 // internal script
 document.querySelector('#go-to-script').onclick = () => {

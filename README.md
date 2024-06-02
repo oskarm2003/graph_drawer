@@ -23,4 +23,4 @@ Tool's showcase video:
 
 
 # Built with
-Projects built with vanilla JS.
+Project built with vanilla JS.

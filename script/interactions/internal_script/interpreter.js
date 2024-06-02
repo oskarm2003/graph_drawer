@@ -1,6 +1,12 @@
-function run_script() {
+async function run_script() {
+
     const script = preProcess(script_input.value)
-    eval("(async function () {" + script + "})();")
+
+    try {
+        await eval("(async function () {" + script + "})()")
+    } catch (error) {
+        print(error, "#ff0000")
+    }
 }
 
 function preProcess(script) {
@@ -34,9 +40,13 @@ function preProcess(script) {
 
 // functions to use in internal script:
 
-function print(string) {
+function print(string, color) {
     const internal_console = document.querySelector("#internal-console")
-    internal_console.innerText += string + "\n"
+    const message = document.createElement("span")
+    message.style.color = color || "black"
+    message.textContent = string
+    internal_console.append(message)
+    internal_console.append(document.createElement("br"))
 }
 
 function clear() {
@@ -52,6 +62,8 @@ function sleep(time) {
 function getGraph(type) {
 
     if (type == "matrix") {
+        if (WEIGHTED)
+            return map_matrix()
         return EDGE_MATRIX
     }
 
@@ -65,7 +77,10 @@ function getGraph(type) {
             for (let c = 0; c < EDGE_MATRIX.length; c++) {
 
                 if (EDGE_MATRIX[r][c] != 0) {
-                    adj_list[adj_list.length - 1].push(c)
+                    if (WEIGHTED)
+                        adj_list[adj_list.length - 1].push([c, EDGE_WEIGHTS[r][c]])
+                    else
+                        adj_list[adj_list.length - 1].push(c)
                 }
             }
         }

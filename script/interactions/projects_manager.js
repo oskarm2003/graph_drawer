@@ -160,7 +160,6 @@ visibility_option.onclick = () => {
             icon.style.display = "none"
         visibility_option.children[num].style.display = "block"
     }
-    console.log(option);
 
     if (option == "true") {
         visibility_option.setAttribute("visible", false)

@@ -15,6 +15,7 @@
     <script defer src="script/interactions/internal_script/text_editor.js"></script>
     <script defer src="script/interactions/internal_script/interpreter.js"></script>
     <script defer src="script/interactions/ui_menu.js"></script>
+    <script defer src="script/interactions/actions_controller.js"></script>
     <script defer src="script/main.js"></script>
     <link rel="stylesheet" href="styles/menu/main.css">
     <link rel="stylesheet" href="styles/menu/script_menu.css">
@@ -76,6 +77,11 @@
                     </div>
                 </div>
 
+                <hr>
+
+                <!-- actions -->
+                <h2>actions</h2>
+                <button id="undo">undo (ctrl+z)</button>
                 <hr>
 
                 <!-- highlighting -->
@@ -215,7 +221,8 @@
                         <br />
                     </p>
                     <ul>
-                        <li><b>print( string )</b> - prints text to the console. Takes string as a paremeter.
+                        <li><b>print( string, ?color )</b> - prints text to the console. Takes string as a paremeter. If
+                            "color" parameter is set the text is displayed in the given color (black default).
                         </li>
                         <li><b>clear( )</b> - clears the console.</li>
                         <li><b>highlightVertex( v, color, ?time )</b> - highlights vertex of index "v" to color "color"
@@ -315,9 +322,8 @@
             </div>
 
             <div id="visibility" visible="true">
-                <img src="./assets/icons/eye_opened_alt2.svg" class="white-filter" alt="opened eye">
-                <img src="./assets/icons/eye_closed_alt2.svg" alt="closed eye" class="white-filter"
-                    style="display:none">
+                <img src="./assets/icons/eye_opened.svg" class="white-filter" alt="opened eye">
+                <img src="./assets/icons/eye_closed.svg" alt="closed eye" class="white-filter" style="display:none">
             </div>
 
         </div>

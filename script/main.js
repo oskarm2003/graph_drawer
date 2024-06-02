@@ -8,6 +8,12 @@ GRAPHS = [
     }
 ]
 
+const action_controller = new ActionController()
+
+Array.prototype.insert = function (index, value) {
+    this.splice(index, 0, value)
+}
+
 init_canvas()
 render()
 
@@ -40,6 +46,8 @@ document.querySelector('#vertex-highlight-mode').onclick = check
 document.querySelector('#highlight-vertices').onclick = highlight_selected_vertices
 document.querySelector('#clear_highlight').onclick = no_highlight
 
+//actions
+document.querySelector('#undo').onclick = () => action_controller.undo()
 
 //weights
 document.querySelector('#weight-on-click').onclick = check
@@ -96,27 +104,39 @@ ACCEPT_HOTKEYS = true
 document.onkeydown = (e) => {
     if (!ACCEPT_HOTKEYS) return
     switch (e.code) {
+
         case 'KeyC':
             document.querySelector('#click_create').click()
             break;
+
         case 'KeyS':
             document.querySelector('#keep_selected').click()
             break
+
         case 'KeyN':
             document.querySelector('#show_alias').click()
             break
+
         case 'KeyB':
             document.querySelector('#blank_background').click()
             break
+
         case 'KeyE':
             document.querySelector('#edge-highlight-mode').click()
             break
+
         case 'KeyV':
             document.querySelector('#vertex-highlight-mode').click()
             break
+
         case 'KeyW':
             document.querySelector('#weight-on-click').click()
             break
+
+        case 'KeyZ':
+            if (IS_CTRL_DOWN)
+                document.querySelector('#undo').click()
+
         default:
             break;
     }

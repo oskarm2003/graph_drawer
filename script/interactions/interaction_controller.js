@@ -41,9 +41,7 @@ function on_down(e) {
             const [x, y] = detected_edge
             const weight = parseInt(document.querySelector("#weight").value)
             if (weight != NaN) {
-                EDGE_WEIGHTS[x][y] += weight
-                if (GRAPH_TYPE === "undirected")
-                    EDGE_WEIGHTS[y][x] = EDGE_WEIGHTS[x][y]
+                add_weight(x, y, weight)
             }
         }
     }
@@ -281,9 +279,14 @@ function change_alias() {
     const submit = () => {
 
         if (input.value != '') {
+            const memo = [...ALIASES]
             for (let el of SELECTED) {
                 ALIASES[el] = input.value
             }
+            // undo
+            action_controller.add_to_undo(() => {
+                ALIASES = memo
+            })
         }
 
         input.value = ''

@@ -27,7 +27,7 @@ function save_graph_data(output) {
     output.is_weighted = WEIGHTED
 }
 
-function add_vertex(x, y) {
+function add_vertex(x, y) { // x,y are position
 
     if (x == undefined || y == undefined) {
         x = 0
@@ -51,8 +51,6 @@ function add_vertex(x, y) {
 
     VERTEX_HIGHLIGHT.push(null)
 
-    render()
-
     // adding to UNDO_STACK
     action_controller.add_to_undo(() => {
         VERTICES_POS.pop()
@@ -68,6 +66,8 @@ function add_vertex(x, y) {
         EDGE_HIGHLIGHT.pop()
         VERTEX_HIGHLIGHT.pop()
     })
+
+    return EDGE_MATRIX.length - 1 // index of created vertex
 
 }
 
@@ -104,9 +104,9 @@ function remove_vertex(vertex) {
 function toggle_edge(v1, v2) {
 
     const action = () => {
-        EDGE_MATRIX[v2][v1] = +!EDGE_MATRIX[v2][v1]
+        EDGE_MATRIX[v1][v2] = +!EDGE_MATRIX[v1][v2]
         if (GRAPH_TYPE == 'undirected')
-            EDGE_MATRIX[v1][v2] = +!EDGE_MATRIX[v1][v2]
+            EDGE_MATRIX[v2][v1] = +!EDGE_MATRIX[v2][v1]
     }
 
     action()

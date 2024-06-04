@@ -9,6 +9,7 @@
     <meta name="keywords" content="graph, graphs, graph drawer, draw graphs,">
     <script defer src="script/graph_data.js"></script>
     <script defer src="script/graph_display.js"></script>
+
     <script defer src="script/interactions/interaction_controller.js"></script>
     <script defer src="script/interactions/projects_manager.js"></script>
     <script defer src="script/interactions/internal_script/display_text.js"></script>
@@ -16,7 +17,12 @@
     <script defer src="script/interactions/internal_script/interpreter.js"></script>
     <script defer src="script/interactions/ui_menu.js"></script>
     <script defer src="script/interactions/actions_controller.js"></script>
+
+    <script defer src="script/interactions/board/graph_interactions.js"></script>
+    <script defer src="script/interactions/board/board_interactions.js"></script>
+
     <script defer src="script/main.js"></script>
+
     <link rel="stylesheet" href="styles/menu/main.css">
     <link rel="stylesheet" href="styles/menu/script_menu.css">
     <link rel="stylesheet" href="styles/menu/settings_menu.css">
@@ -72,10 +78,26 @@
 
                 <div class="checkbox-wrapper">
                     <p>select last connected (s)</p>
+                    <div id="select_connected" class="checkbox" checked="false">
+                        <canvas id="checkbox_canvas"></canvas>
+                    </div>
+                </div>
+
+                <div class="checkbox-wrapper">
+                    <p>keep selection (k)</p>
                     <div id="keep_selected" class="checkbox" checked="false">
                         <canvas id="checkbox_canvas"></canvas>
                     </div>
                 </div>
+                <p>by default vertices get unselected when new edge is created</p>
+
+                <div class="checkbox-wrapper">
+                    <p>join on create (j)</p>
+                    <div id="join_on_create" class="checkbox" checked="false">
+                        <canvas id="checkbox_canvas"></canvas>
+                    </div>
+                </div>
+                <p>new vertices get immediately joined with selected ones</p>
 
                 <hr>
 

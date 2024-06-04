@@ -160,7 +160,7 @@ function render() {
                 CTX.lineWidth = 1
                 if (EDGE_HIGHLIGHT[c][r] != null) {
                     CTX.strokeStyle = EDGE_HIGHLIGHT[c][r]
-                    CTX.lineWidth = 4
+                    CTX.lineWidth = 3
                 }
 
                 const a = translate_virtual_pos(...VERTICES_POS[r])
@@ -233,15 +233,13 @@ function render() {
         let [x, y] = translate_virtual_pos(vertex[0], vertex[1])
         CTX.beginPath()
         CTX.arc(x, y,
-            (VERTEX_RADIUS + (VERTEX_HIGHLIGHT[i] != null)) * ZOOM, // makes vertex bigger it its is highlighted
+            VERTEX_RADIUS * ZOOM,
             0, 2 * Math.PI)
 
-        CTX.fillStyle = (
-            SELECTED.includes(i)) ? '#9f3f3f' :
-            (
-                VERTEX_HIGHLIGHT[i] === null ?
-                    '#000000' : VERTEX_HIGHLIGHT[i]
-            )
+        CTX.fillStyle = "#000000"
+        if (GRABBED === i) CTX.fillStyle = "#5f5fff"
+        else if (SELECTED.includes(i)) CTX.fillStyle = "#9f3f3f"
+        else if (VERTEX_HIGHLIGHT[i] != null) CTX.fillStyle = VERTEX_HIGHLIGHT[i]
 
         CTX.fill()
 

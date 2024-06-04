@@ -3,7 +3,7 @@ class ActionController {
     constructor() {
 
         //settings
-        this.max_depth = 25
+        this.max_depth = 50
 
         //functional
         this.undo_stack = []

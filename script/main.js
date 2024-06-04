@@ -1,3 +1,5 @@
+// functional global variables
+
 GRAPHS = [
     {
         VERTICES_POS: VERTICES_POS,
@@ -8,7 +10,10 @@ GRAPHS = [
     }
 ]
 
-const action_controller = new ActionController()
+let IS_SHIFT_DOWN = false
+let IS_CTRL_DOWN = false
+let GRABBED = -1
+
 
 Array.prototype.insert = function (index, value) {
     this.splice(index, 0, value)
@@ -17,11 +22,28 @@ Array.prototype.insert = function (index, value) {
 init_canvas()
 render()
 
+const action_controller = new ActionController()
+const board_controller = new BoardController(CANVAS)
+
 //basic edge and vertex managment
-document.querySelector('#add_vertex').onclick = add_vertex
+document.querySelector('#add_vertex').onclick = () => {
+
+    add_vertex(0, 0)
+
+    if (SETTINGS_ON.includes("join_on_create"))
+        connect_with_selected(EDGE_MATRIX.length - 1)
+
+    if (SETTINGS_ON.includes("select_connected") && SETTINGS_ON.includes("join_on_create"))
+        select_vertex(EDGE_MATRIX.length - 1)
+
+    render()
+}
+
 document.querySelector('#delete_vertex').onclick = delete_selected
 document.querySelector('#click_create').onclick = check
+document.querySelector('#select_connected').onclick = check
 document.querySelector('#keep_selected').onclick = check
+document.querySelector('#join_on_create').onclick = check
 
 //graph data
 document.querySelector('#save_graph').onclick = open_saver
@@ -97,10 +119,6 @@ const range_handler = () => {
 }
 range_handler()
 
-CANVAS.onmousedown = on_down
-CANVAS.onmousemove = on_move
-CANVAS.onmouseup = on_up
-CANVAS.onmouseout = mouse_out
 
 ACCEPT_HOTKEYS = true
 
@@ -113,7 +131,7 @@ document.onkeydown = (e) => {
             break;
 
         case 'KeyS':
-            document.querySelector('#keep_selected').click()
+            document.querySelector('#select_connected').click()
             break
 
         case 'KeyN':
@@ -139,6 +157,15 @@ document.onkeydown = (e) => {
         case 'KeyZ':
             if (IS_CTRL_DOWN)
                 document.querySelector('#undo').click()
+            break
+
+        case 'KeyK':
+            document.querySelector('#keep_selected').click()
+            break
+
+        case 'KeyJ':
+            document.querySelector('#join_on_create').click()
+            break
 
         default:
             break;

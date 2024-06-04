@@ -2,8 +2,9 @@
 App hosted on: https://graph-drawer.onrender.com/
 
 # About
-Grapher is a tool that helps to create graphs with a few clicks.  
-Your graphs can be directed and weighted.  
+Grapher is a tool that makes creating graphs with a few clicks possible.  
+  
+Graphs can be directed and weighted.  
 Your creation can be saved as code-friendly text data or you can run your code directly on the graph with an internal scripting tool.  
 Running code internally means you can interact with the vertices and edges directly.
 
